@@ -1,4 +1,4 @@
-package frc.robot.shared.MotorController;
+package frc.robot.lib.motors.motorController;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;

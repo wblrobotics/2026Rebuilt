@@ -1,4 +1,4 @@
-package frc.robot.shared.VelocityController;
+package frc.robot.lib.motors.velocityController;
 
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.lib.swerve.updated;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkMax;
@@ -12,9 +12,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
-import frc.robot.util.CleanSparkMaxValue;
-import frc.robot.util.SparkMaxPeriodicFrameConfig;
+import frc.robot.lib.util.CleanSparkMaxValue;
+import frc.robot.lib.util.SparkMaxPeriodicFrameConfig;
 
 public class ModuleIOSparkMax implements ModuleIO {
     private SparkMax driveSparkMax;
@@ -29,39 +28,48 @@ public class ModuleIOSparkMax implements ModuleIO {
     private CANcoder turnAbsoluteEncoder;
 
     // SDS MK4i L3 Gearing
-    private final double driveAfterEncoderReduction = Constants.SwerveConstants.driveReduction;
-    private final double turnAfterEncoderReduction = 150.0 / 7.0;
+    private double driveAfterEncoderReduction;
+    private double turnAfterEncoderReduction;
 
     private final boolean isTurnMotorInverted = true;
     private final Rotation2d absoluteEncoderOffset;
 
-    public ModuleIOSparkMax(int index) {
+    /**
+     * 
+     * @param index The ID the modules are coded as. Front left is 1, fr 2, bl 3, br 4. 
+     * @param moduleType This is again the model of module you are using
+     * @param moduleConfig This is where you set constants for each module
+     */
+    public ModuleIOSparkMax(int index, ModuleType moduleType, ModuleConfig moduleConfig) {
         System.out.println("[Init] Creating ModuleIOSparkMax" + Integer.toString(index));
+
+        driveAfterEncoderReduction = moduleType.driveReduction();
+        turnAfterEncoderReduction = moduleType.turnReduction();
 
         switch (index) {
             case 0:
-                driveSparkMax = new SparkMax(Constants.SwerveConstants.Modules.frontLeftDrive, MotorType.kBrushless);
-                turnSparkMax = new SparkMax(Constants.SwerveConstants.Modules.frontLeftTurn, MotorType.kBrushless);
-                turnAbsoluteEncoder = new CANcoder(Constants.SwerveConstants.Modules.frontLeftEncoder);
-                absoluteEncoderOffset = new Rotation2d(Constants.SwerveConstants.Modules.frontLeftEncoderOffset);
+                driveSparkMax = new SparkMax(moduleConfig.getDriveID(), MotorType.kBrushless);
+                turnSparkMax = new SparkMax(moduleConfig.getTurnID(), MotorType.kBrushless);
+                turnAbsoluteEncoder = new CANcoder(moduleConfig.getEncoderID());
+                absoluteEncoderOffset = new Rotation2d(moduleConfig.getEncoderOffset());
                 break;
             case 1:
-                driveSparkMax = new SparkMax(Constants.SwerveConstants.Modules.frontRightDrive, MotorType.kBrushless);
-                turnSparkMax = new SparkMax(Constants.SwerveConstants.Modules.frontRightTurn, MotorType.kBrushless);
-                turnAbsoluteEncoder = new CANcoder(Constants.SwerveConstants.Modules.frontRightEncoder);
-                absoluteEncoderOffset = new Rotation2d(Constants.SwerveConstants.Modules.frontRightEncoderOffset);
+                driveSparkMax = new SparkMax(moduleConfig.getDriveID(), MotorType.kBrushless);
+                turnSparkMax = new SparkMax(moduleConfig.getTurnID(), MotorType.kBrushless);
+                turnAbsoluteEncoder = new CANcoder(moduleConfig.getEncoderID());
+                absoluteEncoderOffset = new Rotation2d(moduleConfig.getEncoderOffset());
                 break;
             case 2:
-                driveSparkMax = new SparkMax(Constants.SwerveConstants.Modules.backLeftDrive, MotorType.kBrushless);
-                turnSparkMax = new SparkMax(Constants.SwerveConstants.Modules.backLeftTurn, MotorType.kBrushless);
-                turnAbsoluteEncoder = new CANcoder(Constants.SwerveConstants.Modules.backLeftEncoder);
-                absoluteEncoderOffset = new Rotation2d(Constants.SwerveConstants.Modules.backLeftEncoderOffset);
+                driveSparkMax = new SparkMax(moduleConfig.getDriveID(), MotorType.kBrushless);
+                turnSparkMax = new SparkMax(moduleConfig.getTurnID(), MotorType.kBrushless);
+                turnAbsoluteEncoder = new CANcoder(moduleConfig.getEncoderID());
+                absoluteEncoderOffset = new Rotation2d(moduleConfig.getEncoderOffset());
                 break;
             case 3:
-                driveSparkMax = new SparkMax(Constants.SwerveConstants.Modules.backRightDrive, MotorType.kBrushless);
-                turnSparkMax = new SparkMax(Constants.SwerveConstants.Modules.backRightTurn, MotorType.kBrushless);
-                turnAbsoluteEncoder = new CANcoder(Constants.SwerveConstants.Modules.backRightEncoder);
-                absoluteEncoderOffset = new Rotation2d(Constants.SwerveConstants.Modules.backRightEncoderOffset);
+                driveSparkMax = new SparkMax(moduleConfig.getDriveID(), MotorType.kBrushless);
+                turnSparkMax = new SparkMax(moduleConfig.getTurnID(), MotorType.kBrushless);
+                turnAbsoluteEncoder = new CANcoder(moduleConfig.getEncoderID());
+                absoluteEncoderOffset = new Rotation2d(moduleConfig.getEncoderOffset());
                 break;
             default:
                 throw new RuntimeException("Invalid module index for ModuleIOSparkMax");

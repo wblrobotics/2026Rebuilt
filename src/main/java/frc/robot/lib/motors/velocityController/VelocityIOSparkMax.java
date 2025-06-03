@@ -1,4 +1,4 @@
-package frc.robot.shared.VelocityController;
+package frc.robot.lib.motors.velocityController;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;

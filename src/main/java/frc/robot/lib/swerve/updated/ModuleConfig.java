@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.lib.swerve.updated;
 
 public class ModuleConfig {
     public int driveID;

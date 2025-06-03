@@ -1,4 +1,4 @@
-package frc.robot.shared.PositionController;
+package frc.robot.lib.motors.positionController;
 
 import org.littletonrobotics.junction.Logger;
 

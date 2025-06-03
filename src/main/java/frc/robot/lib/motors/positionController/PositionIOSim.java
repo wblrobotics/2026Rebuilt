@@ -1,4 +1,4 @@
-package frc.robot.shared.PositionController;
+package frc.robot.lib.motors.positionController;
 
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
