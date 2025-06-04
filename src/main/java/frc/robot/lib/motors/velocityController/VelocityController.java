@@ -1,8 +1,6 @@
 package frc.robot.lib.motors.velocityController;
 
 import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VelocityController extends SubsystemBase{

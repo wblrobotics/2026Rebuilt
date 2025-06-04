@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PositionController extends SubsystemBase{
     private PositionControllerIO io;
     private final PositionControllerIOInputsAutoLogged inputs = new PositionControllerIOInputsAutoLogged();
-    private boolean enabled = false;
+    private boolean enabled;
     private String subsystem;
 
     public PositionController(PositionControllerIO io, String subsystem) {
