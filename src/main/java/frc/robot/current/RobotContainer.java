@@ -8,6 +8,17 @@ import frc.robot.current.Constants.OperatorConstants;
 import frc.robot.current.commands.Autos;
 import frc.robot.current.commands.ExampleCommand;
 import frc.robot.current.subsystems.ExampleSubsystem;
+import frc.robot.lib.swerve.updated.GyroIO;
+import frc.robot.lib.swerve.updated.GyroIOADXRS450;
+import frc.robot.lib.swerve.updated.GyroIONavX2;
+import frc.robot.lib.swerve.updated.ModuleConfig;
+import frc.robot.lib.swerve.updated.ModuleIOSim;
+import frc.robot.lib.swerve.updated.ModuleIOSparkMax;
+import frc.robot.lib.swerve.updated.ModuleType;
+import frc.robot.lib.swerve.updated.SwerveDrive;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private SwerveDrive swerveDrive;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -30,6 +42,35 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    switch (Constants.robot) {
+      case "SIM":
+        swerveDrive = new SwerveDrive(
+            0, 
+            0, 
+            null, 
+            null, 
+            new GyroIO() {},
+            ModuleType.SDSMK4iL3, 
+            new ModuleIOSim(),
+            new ModuleIOSim(),
+            new ModuleIOSim(),
+            new ModuleIOSim());
+        break;
+      case "Real":
+        swerveDrive = new SwerveDrive(
+            0, 
+            0, 
+            null, 
+            null, 
+            new GyroIOADXRS450() {},
+            ModuleType.SDSMK4iL3, 
+            new ModuleIOSparkMax(0, ModuleType.SDSMK4iL3, new ModuleConfig(0, 0, 0, 0)),
+            new ModuleIOSparkMax(1, ModuleType.SDSMK4iL3, new ModuleConfig(0, 0, 0, 0)),
+            new ModuleIOSparkMax(2, ModuleType.SDSMK4iL3, new ModuleConfig(0, 0, 0, 0)),
+            new ModuleIOSparkMax(3, ModuleType.SDSMK4iL3, new ModuleConfig(0, 0, 0, 0)));
+        break;
+    }
   }
 
   /**
