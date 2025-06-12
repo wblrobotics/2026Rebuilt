@@ -87,7 +87,7 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO, ModuleType moduleType,
                         ModuleIO flIO, ModuleIO frIO, ModuleIO blIO, ModuleIO brIO) {
 
-        System.out.println("[Init] Creating Drive");
+        System.out.println("[Init] Creating SwerveDrive");
 
         this.TrackWidthX = Units.inchesToMeters(trackWidthX);
         this.TrackWidthY = Units.inchesToMeters(trackWidthY);
