@@ -42,12 +42,11 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // TODO: Get better trackWidth measurments
     switch (Constants.robot) {
       case "SIM":
         swerveDrive = new SwerveDrive(
-            21,
-            21,
+            20.75,
+            20.75,
             new PIDConfig(0.9, 0.0, 0.0, 0.116970, 0.133240),
             new PIDConfig(23, 0.0, 0.0, 0.0, 0.0),
             new GyroIO() {},
@@ -59,8 +58,8 @@ public class RobotContainer {
         break;
       case "Real":
         swerveDrive = new SwerveDrive(
-            21,
-            21,
+            20.75,
+            20.75,
             new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
             new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
             new GyroIOADXRS450() {},
