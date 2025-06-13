@@ -15,7 +15,6 @@ import frc.robot.current.subsystems.ExampleSubsystem;
 import frc.robot.lib.commands.DriveWithController;
 import frc.robot.lib.swerve.updated.GyroIO;
 import frc.robot.lib.swerve.updated.GyroIOADXRS450;
-import frc.robot.lib.swerve.updated.GyroIONavX2;
 import frc.robot.lib.swerve.updated.ModuleConfig;
 import frc.robot.lib.swerve.updated.ModuleType;
 import frc.robot.lib.swerve.updated.PIDConfig;
@@ -38,9 +37,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-
+  
     switch (Constants.robot) {
       case "SIM":
         swerveDrive = new SwerveDrive(
@@ -68,7 +65,22 @@ public class RobotContainer {
             new ModuleConfig(5, 6, 11, 0.0),
             new ModuleConfig(7, 8, 12, 0.0));
         break;
+      default:
+        swerveDrive = new SwerveDrive(
+            20.75,
+            20.75,
+            new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
+            new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
+            new GyroIOADXRS450() {},
+            ModuleType.SDSMK4iL3,
+            new ModuleConfig(1, 2, 9, 0.0),
+            new ModuleConfig(3, 4, 10, 0.0),
+            new ModuleConfig(5, 6, 11, 0.0),
+            new ModuleConfig(7, 8, 12, 0.0));
+        break;
     }
+    // Configure the trigger bindings
+    configureBindings();
   }
 
   /**
