@@ -101,7 +101,7 @@ public class RobotContainer {
     // cancelling on release.
     driveXbox.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    swerveDrive.setDefaultCommand(new DriveWithController(swerveDrive, 0.5, 0.75, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(), () -> driveXbox.getRightX(), () -> driveXbox.getRightX(), () -> driveXbox.a().getAsBoolean()));
+    swerveDrive.setDefaultCommand(new DriveWithController(swerveDrive, 0.25, 1, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(), () -> driveXbox.getRightX(), () -> driveXbox.getRightX(), () -> driveXbox.a().getAsBoolean()));
     driveXbox.x().onTrue(Commands.runOnce(swerveDrive::stopWithX,swerveDrive));
   }
 

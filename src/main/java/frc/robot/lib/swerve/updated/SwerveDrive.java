@@ -118,9 +118,9 @@ public class SwerveDrive extends SubsystemBase {
         switch (Constants.robot) {
             case "Real":
                 modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
-                modules[1] = new Module(new ModuleIOSparkMax(0, moduleType, frConfig), 1, drivePID, turnPID);
-                modules[2] = new Module(new ModuleIOSparkMax(0, moduleType, blConfig), 2, drivePID, turnPID);
-                modules[3] = new Module(new ModuleIOSparkMax(0, moduleType, brConfig), 3, drivePID, turnPID);
+                modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
+                modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
+                modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
                 break;
             case "Sim":
                 modules[0] = new Module(new ModuleIOSim(), 0, drivePID, turnPID);

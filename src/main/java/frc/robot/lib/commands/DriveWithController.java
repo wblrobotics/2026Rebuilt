@@ -77,8 +77,15 @@ public class DriveWithController extends Command {
 
         // Get direction and magnitude of linear axes
         double linearMagnitude = Math.hypot(leftY, leftX);
-        Rotation2d linearDirection = new Rotation2d(leftY, leftX);
+        Rotation2d linearDirection;
 
+        // Handle case where both leftX and leftY are zero
+        if (linearMagnitude == 0) {
+            linearDirection = new Rotation2d(0); // Default to 0 radians
+        } else {
+            linearDirection = new Rotation2d(leftY, leftX);
+        }
+    
         // Apply deadband
         linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.05);
         rightX = MathUtil.applyDeadband(rightX, 0.05);
@@ -105,7 +112,7 @@ public class DriveWithController extends Command {
                 linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                 linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                 rightX * drive.getMaxAngularSpeedRadPerSec());
-        
+
         // Convert from field relative
         if (!robotRelativeOverride.get()) {
             var driveRotation = drive.getRotation();
