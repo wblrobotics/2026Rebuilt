@@ -11,7 +11,7 @@ public class ModuleConfig {
      * @param driveID CAN ID of the drive motor
      * @param turnID CAN ID of the turn motor
      * @param encoderID CAN ID of the encoder
-     * @param encoderOffset The angle offset from forward of the specific wheel. 
+     * @param encoderOffset The angle offset from forward of the specific wheel in degrees. 
      */
     public ModuleConfig(int driveID, int turnID, int encoderID, double encoderOffset) {
         this.driveID = driveID;
@@ -33,6 +33,6 @@ public class ModuleConfig {
     }
 
     public double getEncoderOffset() {
-        return encoderOffset;
+        return Math.toRadians(encoderOffset);
     }
 }

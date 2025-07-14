@@ -4,7 +4,12 @@
 
 package frc.robot.current;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -13,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the TimedRobot documentation. If you change the name of this class or the package after creating
  * this project, you must also update the Main.java file in the project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
@@ -23,8 +28,27 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
+    Logger.recordMetadata("ProjectName", "MyProject");
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    if (isReal()) {
+      Logger.addDataReceiver(new NT4Publisher());
+      Logger.addDataReceiver(new WPILOGWriter());
+    } else {
+      Logger.addDataReceiver(new NT4Publisher());
+    }
+    if (isReal()) {
+      PortForwarder.add(5800, "10.22.7.69", 5800);
+      PortForwarder.add(1181, "10.22.7.69", 1181);
+      PortForwarder.add(1182, "10.22.7.69", 1182);
+      PortForwarder.add(1183, "10.22.7.69", 1183);
+      PortForwarder.add(1184, "10.22.7.69", 1184);
+      PortForwarder.add(1185, "10.22.7.69", 1185);
+      PortForwarder.add(1186, "10.22.7.69", 1186);
+    }
+
+    Logger.start();
     m_robotContainer = new RobotContainer();
   }
 

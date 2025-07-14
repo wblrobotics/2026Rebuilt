@@ -12,6 +12,7 @@ import frc.robot.current.Constants.OperatorConstants;
 import frc.robot.current.commands.Autos;
 import frc.robot.current.commands.ExampleCommand;
 import frc.robot.current.subsystems.ExampleSubsystem;
+import frc.robot.current.subsystems.LedOperation;
 import frc.robot.lib.commands.DriveWithController;
 import frc.robot.lib.swerve.updated.GyroIO;
 import frc.robot.lib.swerve.updated.GyroIOADXRS450;
@@ -31,6 +32,7 @@ import frc.robot.lib.swerve.updated.SwerveDrive;
  */
 public class RobotContainer {
   private SwerveDrive swerveDrive;
+  private LedOperation leds;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -42,16 +44,19 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
+    leds = new LedOperation();
     swerveDrive = new SwerveDrive(
         20.75,
         20.75,
-        new PIDConfig(0.9, 0.0, 0.0, 0.116970, 0.133240),
-        new PIDConfig(23, 0.0, 0.0, 0.0, 0.0),
+        new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
+        new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
+        new GyroIOADXRS450() {
+        },
         ModuleType.SDSMK4iL3,
         new ModuleConfig(1, 2, 9, 0.0),
         new ModuleConfig(3, 4, 10, 0.0),
         new ModuleConfig(5, 6, 11, 0.0),
-        new ModuleConfig(7, 8, 12, 0.0));
+        new ModuleConfig(7, 8, 12, 2));
 
     // Configure the trigger bindings
     configureBindings();
@@ -72,9 +77,17 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    new Trigger(m_exampleSubsystem::exampleCondition)
+        .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+    // pressed,
+    // cancelling on release.
+    driveXbox.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     swerveDrive.setDefaultCommand(
-        new DriveWithController(swerveDrive, 0.25, 1, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),
+        new DriveWithController(swerveDrive, 0.5, 0.25, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),
             () -> driveXbox.getRightX(), () -> driveXbox.getRightY(), () -> driveXbox.a().getAsBoolean()));
     driveXbox.x().onTrue(Commands.runOnce(swerveDrive::stopWithX, swerveDrive));
   }

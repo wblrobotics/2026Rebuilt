@@ -77,11 +77,8 @@ public class DriveWithController extends Command {
 
         // Get direction and magnitude of linear axes
         double linearMagnitude = Math.hypot(leftY, leftX);
-        Rotation2d linearDirection;
+        Rotation2d linearDirection = new Rotation2d(leftY + 1e-6, leftX + 1e-6);
 
-        // Handle case where both leftX and leftY are zero
-        linearDirection = new Rotation2d(leftY, leftX);
-    
         // Apply deadband
         linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.05);
         rightX = MathUtil.applyDeadband(rightX, 0.05);

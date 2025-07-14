@@ -52,7 +52,8 @@ public class SwerveDrive extends SubsystemBase {
     private final SysIdRoutine sysId;
     private static RobotConfig config;
 
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+    private SwerveDriveKinematics kinematics;
+    // = new SwerveDriveKinematics(getModuleTranslations());
 
     private ChassisSpeeds setpoint = new ChassisSpeeds();
     private SwerveModuleState[] lastSetpointStates = new SwerveModuleState[] {
@@ -85,26 +86,21 @@ public class SwerveDrive extends SubsystemBase {
      * @param blConfig The config you would like to use for this module
      * @param brConfig The config you would like to use for this module
      */
-    public SwerveDrive(
-        double trackWidthX, 
-        double trackWidthY, 
-        PIDConfig drivePID, 
-        PIDConfig turnPID, 
-        ModuleType moduleType, 
-        ModuleConfig flConfig, 
-        ModuleConfig frConfig, 
-        ModuleConfig blConfig, 
-        ModuleConfig brConfig
-        ) {
-    
+    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO, ModuleType moduleType,
+                        ModuleConfig flConfig, ModuleConfig frConfig, ModuleConfig blConfig, ModuleConfig brConfig) {
+
         System.out.println("[Init] Creating SwerveDrive");
 
         this.TrackWidthX = Units.inchesToMeters(trackWidthX);
         this.TrackWidthY = Units.inchesToMeters(trackWidthY);
 
+        kinematics = new SwerveDriveKinematics(getModuleTranslations());
+
         this.maxLinearSpeed = Units.feetToMeters(moduleType.maxSpeed()); 
-        this.maxAngularSpeed = maxLinearSpeed / Arrays.stream(getModuleTranslations()).map(translation -> translation.getNorm())
-        .max(Double::compare).get();
+        this.maxAngularSpeed = Math.PI;
+        // this.maxAngularSpeed = maxLinearSpeed / Arrays.stream(getModuleTranslations()).map(translation -> translation.getNorm())
+        // .max(Double::compare).get();
+        this.gyroIO = gyroIO;
 
         try {
             config = RobotConfig.fromGUISettings();
@@ -112,24 +108,13 @@ public class SwerveDrive extends SubsystemBase {
             // Handle exception as needed
             e.printStackTrace();
         }
-        
+
         switch (Constants.robot) {
             case "Real":
-                modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
-                modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
-                modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
-                modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
-
-                gyroIO = new GyroIOADXRS450();
-                break;
-            case "Sim":
-                modules[0] = new Module(new ModuleIOSim(), 0, drivePID, turnPID);
-                modules[1] = new Module(new ModuleIOSim(), 1, drivePID, turnPID);
-                modules[2] = new Module(new ModuleIOSim(), 2, drivePID, turnPID);
-                modules[3] = new Module(new ModuleIOSim(), 3, drivePID, turnPID);
-
-                gyroIO = new GyroIOADXRS450();
-                break;
+            modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
+            modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
+            modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
+            modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
         }
 
         lastMovementTimer.start();
