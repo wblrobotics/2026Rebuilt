@@ -12,6 +12,7 @@ import frc.robot.current.Constants.OperatorConstants;
 import frc.robot.current.commands.Autos;
 import frc.robot.current.commands.ExampleCommand;
 import frc.robot.current.subsystems.ExampleSubsystem;
+import frc.robot.current.subsystems.LedOperation;
 import frc.robot.lib.commands.DriveWithController;
 import frc.robot.lib.swerve.updated.GyroIO;
 import frc.robot.lib.swerve.updated.GyroIOADXRS450;
@@ -33,6 +34,7 @@ import frc.robot.lib.swerve.updated.SwerveDrive;
  */
 public class RobotContainer {
   private SwerveDrive swerveDrive;
+  private LedOperation leds;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -44,6 +46,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
+    leds = new LedOperation();
     swerveDrive = new SwerveDrive(
         20.75,
         20.75,

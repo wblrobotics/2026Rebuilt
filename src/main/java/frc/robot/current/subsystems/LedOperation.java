@@ -11,7 +11,7 @@ import frc.robot.lib.leds.LedColor;
 import frc.robot.lib.leds.LedController;
 
 public class LedOperation extends SubsystemBase {
-  public static final LedController leds = new LedController(58, 3, .75);
+  public static final LedController leds = new LedController(300, 3, .75);
 
   // Constants regarding manual LED states
   private static final String setSolid = "Solid";
@@ -81,12 +81,14 @@ public class LedOperation extends SubsystemBase {
     m_color.addOption("", blue);
     m_color.addOption("", cornflower);
     SmartDashboard.putData("Manual LED", m_chooser);
+    SmartDashboard.putData("LEDColor", m_color);
     manualLedState = m_chooser.getSelected();
   }
 
   @Override
   public void periodic() {
     manualLedState = m_chooser.getSelected();
+    ledColor = m_chooser.getSelected();
     automaticLED = false;
 
     robotStatus();
@@ -154,7 +156,8 @@ public class LedOperation extends SubsystemBase {
       case orange:
         color = LedColor.ORANGE;
         break;
-
+      default:
+        color = LedColor.AQUA;
     }
 
     switch (manualLedState) {
