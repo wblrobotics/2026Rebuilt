@@ -119,7 +119,7 @@ public class LedOperation extends SubsystemBase {
   @Override
   public void periodic() {
     manualLedState = m_chooser.getSelected();
-    ledColor = m_chooser.getSelected();
+    ledColor = m_color.getSelected();
     automaticLED = false;
 
     robotStatus();
