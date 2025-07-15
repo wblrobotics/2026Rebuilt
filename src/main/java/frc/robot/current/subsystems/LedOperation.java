@@ -14,7 +14,7 @@ import frc.robot.lib.leds.LedColor;
 import frc.robot.lib.leds.LedController;
 
 public class LedOperation extends SubsystemBase {
-  public static final LedController leds = new LedController(200, 3, .75);
+  public static final LedController leds = new LedController(240, 3, .75);
 
   // Constants regarding manual LED states
   private static final String setSolid = "Solid";
@@ -66,7 +66,7 @@ public class LedOperation extends SubsystemBase {
   public boolean automaticLED = false;
 
   public LedOperation() {
-    leds.addSection("full", 0, 200);
+    leds.addSection("full", 0, 240);
     leds.addSection("right", 41, 80);
     leds.addSection("front", 81, 130);
     leds.addSection("left", 131, 200);

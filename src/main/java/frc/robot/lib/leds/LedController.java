@@ -61,4 +61,8 @@ public class LedController extends LedModes {
     public void updateLeds() {
         super.setData();
     }
+
+    public int getLedBrightness() {
+        return ledBrightness;
+    }
 }
