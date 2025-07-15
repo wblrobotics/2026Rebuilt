@@ -67,12 +67,12 @@ public class LedOperation extends SubsystemBase {
 
   public LedOperation() {
     leds.addSection("full", 0, 240);
-    leds.addSection("right", 41, 80);
+    leds.addSection("right", 32, 80);
     leds.addSection("front", 81, 130);
-    leds.addSection("left", 131, 200);
-    leds.addSection("mechanismFrame", 41, 200);
-    leds.addSection("underglow1", 0, 40);
-    leds.addSection("underglow", 200, 240);
+    leds.addSection("left", 131, 190);
+    leds.addSection("mechanismFrame", 32, 190);
+    leds.addSection("underglow1", 0, 32);
+    leds.addSection("underglow", 190, 240);
 
     m_chooser.setDefaultOption("Solid", setSolid);
     m_chooser.addOption("Two Color Solid", setTwoToneSolid);
@@ -235,7 +235,7 @@ public class LedOperation extends SubsystemBase {
         color = LedColor.WHITE;
         break;
       default:
-        color = LedColor.LIGHT_ORANGE;
+        color = LedColor.ORANGE;
         break;
     }
 

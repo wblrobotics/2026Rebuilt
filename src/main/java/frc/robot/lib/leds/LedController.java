@@ -31,12 +31,13 @@ public class LedController extends LedModes {
      *                   1
      */
     public LedController(int length, int port, double brightness) {
-        super(length, port, ledBrightness);
+        super(length, port, (int) brightness * 255);
 
         MathUtil.clamp(brightness, 0, 1);
         ledLength = length;
         ledPort = port;
         ledBrightness = (int) brightness * 255;
+
     }
 
     /**
