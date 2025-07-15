@@ -35,7 +35,6 @@ public class LedModes {
      * @param brightness is how bright you would like you LEDs. Value between 0 and 1
     */
     public LedModes(int length, int port, int brightness) {
-        this.brightnessLimit = brightness;
         m_Led = new AddressableLED(port);
         ledBuffer = new AddressableLEDBuffer(length);
 

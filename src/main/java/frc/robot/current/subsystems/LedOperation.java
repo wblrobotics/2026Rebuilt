@@ -69,22 +69,22 @@ public class LedOperation extends SubsystemBase {
     leds.addSection("full", 0, 240);
     leds.addSection("right", 32, 80);
     leds.addSection("front", 81, 130);
-    leds.addSection("left", 131, 190);
-    leds.addSection("mechanismFrame", 32, 190);
+    leds.addSection("left", 131, 191);
+    leds.addSection("mechanismFrame", 32, 191);
     leds.addSection("underglow1", 0, 32);
-    leds.addSection("underglow", 190, 240);
+    leds.addSection("underglow", 191, 230);
 
     m_chooser.setDefaultOption("Solid", setSolid);
     m_chooser.addOption("Two Color Solid", setTwoToneSolid);
     m_chooser.addOption("Solid Black", setColorBlack);
     m_chooser.addOption("Rainbow", rainbow);
-    m_chooser.addOption("Wave Blue and Green", fadeBlueGreen);
-    m_chooser.addOption("Breath Light Blue", breathColor);
-    m_chooser.addOption("Red Strobe", strobeColor);
+    m_chooser.addOption("Fade Blue and Green", fadeBlueGreen);
+    m_chooser.addOption("Breath", breathColor);
+    m_chooser.addOption("Strobe", strobeColor);
     m_chooser.addOption("Carnival", carnivalEasterGreenPurple);
-    m_chooser.addOption("Fill Green", fillColor);
-    m_chooser.addOption("Zip Aqua", zipColor);
-    m_chooser.addOption("Wave Purple", waveColor);
+    m_chooser.addOption("Fill", fillColor);
+    m_chooser.addOption("Zip", zipColor);
+    m_chooser.addOption("Wave", waveColor);
     m_chooser.addOption("Color testing", colorTest);
 
     m_color.addOption("Red", red);
