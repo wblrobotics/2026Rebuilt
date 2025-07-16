@@ -20,7 +20,7 @@ public class LedController extends LedModes {
      * FRC robot.
      * This is a value between 0 and 1.
      */
-    public static int ledBrightness;
+    public static int ledBrightness = 255;
 
     /**
      * Configures the LED's length, PWM port, and brightness

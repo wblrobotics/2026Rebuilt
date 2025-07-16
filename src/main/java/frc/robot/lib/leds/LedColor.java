@@ -78,7 +78,11 @@ public enum LedColor {
             case BLACK:
                 return 0;
             default:
-                return LedController.ledBrightness;
+                if (LedController.ledBrightness > 0) {
+                    return (int) LedController.ledBrightness;
+                } else {
+                    return 225;
+                }
         }
     }
 }
