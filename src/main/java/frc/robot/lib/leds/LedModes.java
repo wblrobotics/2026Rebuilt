@@ -21,19 +21,22 @@ public class LedModes {
     private int m_rainbowFirstPixelHue;
     private int m_waveValue;
     private int m_range;
-    private int zipIncrease;
     private int carnivalIncrease;
+    private int zipIncrease;
     private int start;
     private int end;
     private static final double fadeExponent = 0.4;
     public boolean on = true;
+    public boolean starter = true;
 
-    /** Configures the LED's length, PWM port, and brightness
+    /**
+     * Configures the LED's length, PWM port, and brightness
      * 
-     * @param length is the total number of LEDs you would like to operate
-     * @param port is the PWM port the LEDs are plugged into
-     * @param brightness is how bright you would like you LEDs. Value between 0 and 1
-    */
+     * @param length     is the total number of LEDs you would like to operate
+     * @param port       is the PWM port the LEDs are plugged into
+     * @param brightness is how bright you would like you LEDs. Value between 0 and
+     *                   1
+     */
     public LedModes(int length, int port, int brightness) {
         m_Led = new AddressableLED(port);
         ledBuffer = new AddressableLEDBuffer(length);
@@ -66,7 +69,7 @@ public class LedModes {
             final var hue = color.hues();
             final var value = color.value();
             // Sets the specified LED to the HSV values for the preferred color
-            ledBuffer.setHSV(i, hue, 255, 100);
+            ledBuffer.setHSV(i, hue, 255, value);
         }
     }
 
@@ -84,12 +87,12 @@ public class LedModes {
                 final var hue = color1.hues();
                 final var value = color1.value();
                 // Sets the specified LED to the HSV values for the preferred color
-                ledBuffer.setHSV(i, hue, 255, 100);
+                ledBuffer.setHSV(i, hue, 255, value);
             } else {
                 final var hue = color2.hues();
                 final var value = color2.value();
                 // Sets the specified LED to the HSV values for the preferred color
-                ledBuffer.setHSV(i, hue, 255, 100);
+                ledBuffer.setHSV(i, hue, 255, value);
             }
         }
     }
@@ -122,7 +125,9 @@ public class LedModes {
         for (int i = LedSectionConfig.getSectionStart(section); i < LedSectionConfig.getSectionEnd(section); i++) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var hue = (m_rainbowFirstPixelHue + (i * 180 / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section))) % 180);
+            final var hue = (m_rainbowFirstPixelHue
+                    + (i * 180 / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section)))
+                            % 180);
             // Set the value
             ledBuffer.setHSV(i, hue, 255, brightnessLimit);
         }
@@ -163,10 +168,12 @@ public class LedModes {
     }
 
     /**
-     * Moves an area of color through the strip as a soft fade rather than an adrupt end like {@link LedModes#zip}
+     * Moves an area of color through the strip as a soft fade rather than an adrupt
+     * end like {@link LedModes#zip}
      * 
      * @param section is the range you want to add the effect
-     * @param speed   is the speed you want the lit section to run down the strip - 5 is
+     * @param speed   is the speed you want the lit section to run down the strip -
+     *                5 is
      *                recommended for long distance, 3 is recommended for short
      *                distances
      */
@@ -175,7 +182,8 @@ public class LedModes {
         for (int i = LedSectionConfig.getSectionStart(section); i < LedSectionConfig.getSectionEnd(section); i++) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var value = (m_waveValue + (i * color.value() / LedSectionConfig.getSectionEnd(section))) % color.value();
+            final var value = (m_waveValue + (i * color.value() / LedSectionConfig.getSectionEnd(section)))
+                    % color.value();
             // Set the value
             ledBuffer.setHSV(i, color.hues(), 255, value);
         }
@@ -189,7 +197,7 @@ public class LedModes {
      * Pulses the lights to give them a breathing effect.
      * 
      * @param section  is the range you want to add the effect
-     * @param color1    is the color that with breath
+     * @param color1   is the color that with breath
      * @param duration is the time it takes to go through 1 cycle
      */
     public void breath(String section, LedColor color1, double duration) {
@@ -206,23 +214,25 @@ public class LedModes {
     /**
      * Sets the LEDS to a striped pattern of infinite colors of users choosing
      * 
-     * @param colors           is the list of colors you want to add
-     * @param stripeLength     is how many LEDS you want each color to possess
-     * @param duration         is how quickly you want the LEDS to move down the strip
+     * @param colors       is the list of colors you want to add
+     * @param stripeLength is how many LEDS you want each color to possess
+     * @param duration     is how quickly you want the LEDS to move down the strip
      */
     /*
-    private void stripes(List<Color> colors, int stripeLength, double duration) {
-        int offset = 
-            (int) (System.currentTimeMillis() % duration / duration * stripeLength * colors.size());
-
-        for (int i = 0; i < length; i++) {
-            int colorIndex = 
-                (int) (Math.floor((double) (i - offset) / stripeLength) + colors.size()) % colors.size();
-            colorIndex = colors.size() - 1 - colorIndex;
-            ledBuffer.setHSV(i, colors.get(colorIndex), 255, brightnessLimit);
-        }
-    }
-    */
+     * private void stripes(List<Color> colors, int stripeLength, double duration) {
+     * int offset =
+     * (int) (System.currentTimeMillis() % duration / duration * stripeLength *
+     * colors.size());
+     * 
+     * for (int i = 0; i < length; i++) {
+     * int colorIndex =
+     * (int) (Math.floor((double) (i - offset) / stripeLength) + colors.size()) %
+     * colors.size();
+     * colorIndex = colors.size() - 1 - colorIndex;
+     * ledBuffer.setHSV(i, colors.get(colorIndex), 255, brightnessLimit);
+     * }
+     * }
+     */
 
     /**
      * Flashes the LEDs on and off at the designated speed
@@ -285,7 +295,8 @@ public class LedModes {
             }
         }
         // Only pass if the time calculated has passed
-        double speed = increment * (duration / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section)));
+        double speed = increment
+                * (duration / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section)));
         if (!fillTimer.advanceIfElapsed(speed))
             return;
 
@@ -295,38 +306,53 @@ public class LedModes {
         m_range %= LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section);
     }
 
-    /** 
+    /**
      * 2 Color mode that appears to move along the section
      * 
-     * @param section   is the range you want to add the effect
-     * @param color1    is the first color you would like to display
-     * @param color2    is the second color you would ike to display
-     * @param length    is how many LEDs each color represents per cycle
-     * @param speed     is how fast you want the lights to move along the section 
+     * @param section is the range you want to add the effect
+     * @param color1  is the first color you would like to display
+     * @param color2  is the second color you would ike to display
+     * @param length  is how many LEDs each color represents per cycle
+     * @param speed   is how fast you want the lights to move along the section
      *
      */
     public void carnival(String section, LedColor color1, LedColor color2, int length, double speed) {
-        start = LedSectionConfig.getSectionEnd(section) - carnivalIncrease;
-        end = start - length;
-
         for (int i = LedSectionConfig.getSectionStart(section); i < LedSectionConfig.getSectionEnd(section); i++) {
-                if (i > start && i <= end) {
-                    ledBuffer.setHSV(i, color1.hues(), 255, color1.value());
+            if (starter) {
+                if (i % 2 == 0) {
+                    final var hue = color1.hues();
+                    final var value = color1.value();
+                    // Sets the specified LED to the HSV values for the preferred color
+                    ledBuffer.setHSV(i, hue, 255, value);
                 } else {
-                    ledBuffer.setHSV(i, color2.hues(), 255, color2.value());
+                    final var hue = color2.hues();
+                    final var value = color2.value();
+                    // Sets the specified LED to the HSV values for the preferred color
+                    ledBuffer.setHSV(i, hue, 255, value);
                 }
-            
+            } else {
+                if (i % 2 == 0) {
+                    final var hue = color2.hues();
+                    final var value = color2.value();
+                    // Sets the specified LED to the HSV values for the preferred color
+                    ledBuffer.setHSV(i, hue, 255, value);
+                } else {
+                    final var hue = color1.hues();
+                    final var value = color1.value();
+                    // Sets the specified LED to the HSV values for the preferred color
+                    ledBuffer.setHSV(i, hue, 255, value);
+                }
+            }
         }
-        
-        // Only pass if the time calculated has passed
-        double rate = length * (speed / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section)));
-        if (!carnivalTimer.advanceIfElapsed(rate))
+
+        if (!carnivalTimer.advanceIfElapsed(speed))
             return;
 
-        // increase to move the strip
-        carnivalIncrease += 1;
-        // check bounds
-        carnivalIncrease %= LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section) - length;
+        if (starter) {
+            starter = false;
+        } else {
+            starter = true;
+        }
     }
 
     /**
@@ -368,7 +394,8 @@ public class LedModes {
         }
 
         // Only pass if the time calculated has passed
-        double speed = increment * (duration / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section)));
+        double speed = increment
+                * (duration / (LedSectionConfig.getSectionEnd(section) - LedSectionConfig.getSectionStart(section)));
         if (!zipTimer.advanceIfElapsed(speed))
             return;
 
