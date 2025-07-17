@@ -29,8 +29,8 @@ public class LedOperation extends SubsystemBase {
   public LedOperation() {
     leds.addSection("full", 0, 240);
     leds.addSection("right", 32, 80);
-    leds.addSection("front", 81, 130);
-    leds.addSection("left", 131, 191);
+    leds.addSection("front", 81, 145);
+    leds.addSection("left", 146, 191);
     leds.addSection("mechanismFrame", 32, 191);
     leds.addSection("underglow1", 0, 32);
     leds.addSection("underglow", 191, 238);
