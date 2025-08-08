@@ -15,7 +15,6 @@ import frc.robot.lib.leds.LedController;
 
 public class LedOperation extends SubsystemBase {
   public static final LedController leds = new LedController(240, 3, .75);
-  private Runnable manualLedState;
   private LedColor color;
   private final SendableChooser<Runnable> m_chooser = new SendableChooser<>();
   private final SendableChooser<LedColor> m_color = new SendableChooser<>();
@@ -50,7 +49,7 @@ public class LedOperation extends SubsystemBase {
 
     m_color.addOption("Red", LedColor.RED);
     m_color.addOption("Red-Orange", LedColor.RED_ORANGE);
-    m_color.addOption("Orange", LedColor.ORANGE);
+    m_color.setDefaultOption("Orange", LedColor.ORANGE);
     m_color.addOption("Gold", LedColor.GOLD);
     m_color.addOption("Yellow", LedColor.YELLOW);
     m_color.addOption("Yellow-Green", LedColor.YELLOW_GREEN);
@@ -73,13 +72,10 @@ public class LedOperation extends SubsystemBase {
 
     SmartDashboard.putData("Manual LED", m_chooser);
     SmartDashboard.putData("LEDColor", m_color);
-    manualLedState = m_chooser.getSelected();
-    color = m_color.getSelected();
   }
 
   @Override
   public void periodic() {
-    manualLedState = m_chooser.getSelected();
     color = m_color.getSelected();
     automaticLED = false;
 
@@ -121,16 +117,13 @@ public class LedOperation extends SubsystemBase {
     }
   }
 
-  /** Method to set the LEDs automatically depending on the robots state */
+  /* Method to set the LEDs automatically depending on the robots state */
   public void updateState() {
 
   }
 
-  /** Method to set the LEDs to different states during the match */
+  /* Method to set the LEDs to different states during the match */
   public void manualState() {
-    if (color == null){
-      color = LedColor.ORANGE;
-    }
-    manualLedState.run();
+    m_chooser.getSelected().run();
   }
 }
