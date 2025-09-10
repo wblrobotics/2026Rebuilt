@@ -14,8 +14,7 @@ import frc.robot.current.commands.ExampleCommand;
 import frc.robot.current.subsystems.ExampleSubsystem;
 import frc.robot.current.subsystems.LedOperation;
 import frc.robot.lib.commands.DriveWithController;
-import frc.robot.lib.swerve.updated.GyroIO;
-import frc.robot.lib.swerve.updated.GyroIOADXRS450;
+import frc.robot.lib.swerve.updated.GyroIONavX2;
 import frc.robot.lib.swerve.updated.ModuleConfig;
 import frc.robot.lib.swerve.updated.ModuleType;
 import frc.robot.lib.swerve.updated.PIDConfig;
@@ -50,7 +49,7 @@ public class RobotContainer {
         20.75,
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
-        new GyroIOADXRS450() {
+        new GyroIONavX2() {
         },
         ModuleType.SDSMK4iL3,
         new ModuleConfig(1, 2, 9, 0.0),
