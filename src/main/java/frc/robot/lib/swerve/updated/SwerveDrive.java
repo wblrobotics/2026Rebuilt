@@ -38,6 +38,8 @@ public class SwerveDrive extends SubsystemBase {
     private double maxLinearSpeed; // Max speed of the swerve module
     private double maxAngularSpeed;
 
+    private String motorController;
+
 
     public static final double coastThresholdMetersPerSec = 0.05; // Need to be under this to switch to coast while
                                                                   // disabling
@@ -79,13 +81,14 @@ public class SwerveDrive extends SubsystemBase {
      * @param drivePID The PID constants for linear motion
      * @param turnPID The PID constants for angular motion
      * @param gyroIO What IO you'd like to use for the gyroscope
+     * @param motorController A string for the type of motor controller used "Spark Flex", "Spark Max", etc
      * @param moduleType The model of module you are using. 
      * @param flConfig The config you would like to use for this module
      * @param frConfig The config you would like to use for this module
      * @param blConfig The config you would like to use for this module
      * @param brConfig The config you would like to use for this module
      */
-    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO, ModuleType moduleType,
+    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO, String motorController, ModuleType moduleType,
                         ModuleConfig flConfig, ModuleConfig frConfig, ModuleConfig blConfig, ModuleConfig brConfig) {
 
         System.out.println("[Init] Creating SwerveDrive");
@@ -100,6 +103,7 @@ public class SwerveDrive extends SubsystemBase {
         // this.maxAngularSpeed = maxLinearSpeed / Arrays.stream(getModuleTranslations()).map(translation -> translation.getNorm())
         // .max(Double::compare).get();
         this.gyroIO = gyroIO;
+        this.motorController = motorController;
 
         try {
             config = RobotConfig.fromGUISettings();
@@ -108,8 +112,13 @@ public class SwerveDrive extends SubsystemBase {
             e.printStackTrace();
         }
 
-        switch (Constants.robot) {
-            case "Real":
+        switch (motorController) {
+            case "SparkFlex":
+            modules[0] = new Module(new ModuleIOSparkFlex(0, moduleType, flConfig), 0, drivePID, turnPID);
+            modules[1] = new Module(new ModuleIOSparkFlex(1, moduleType, frConfig), 1, drivePID, turnPID);
+            modules[2] = new Module(new ModuleIOSparkFlex(2, moduleType, blConfig), 2, drivePID, turnPID);
+            modules[3] = new Module(new ModuleIOSparkFlex(3, moduleType, brConfig), 3, drivePID, turnPID);
+            case "SparkMax":
             modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
             modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
             modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);

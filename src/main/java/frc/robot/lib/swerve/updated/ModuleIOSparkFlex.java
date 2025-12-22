@@ -12,8 +12,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.lib.util.CleanSparkFlexValue;
-import frc.robot.lib.util.SparkFlexPeriodicFrameConfig;
+import frc.robot.lib.util.CleanSparkMaxValue;
+//import frc.robot.lib.util.SparkFlexPeriodicFrameConfig;
 
 public class ModuleIOSparkFlex implements ModuleIO {
     private SparkFlex driveSparkFlex;
@@ -61,7 +61,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
         // Insert burn logic here...
 
         driveSparkFlex.setCANTimeout(500);
-        turnSparkFLex.setCANTimeout(500);
+        turnSparkFlex.setCANTimeout(500);
 
         driveEncoder = driveSparkFlex.getEncoder();
         turnRelativeEncoder = turnSparkFlex.getEncoder();
@@ -77,8 +77,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
         // We'll set these values in memory. We aren't burning for now. This can be
         // updated later...
         for (int i = 0; i < 2; i++) {
-            SparkFlexPeriodicFrameConfig.configNotLeader(driveSparkFlex, driveConfig);
-            SparkFlexPeriodicFrameConfig.configNotLeader(turnSparkFlex, turnConfig);
+            //SparkFlexPeriodicFrameConfig.configNotLeader(driveSparkFlex, driveConfig);
+            //SparkFlexPeriodicFrameConfig.configNotLeader(turnSparkFlex, turnConfig);
             driveConfig.signals.primaryEncoderPositionPeriodMs(10);
 
             // TODO: Look at encoder stuff - why can't they be together?
@@ -101,10 +101,10 @@ public class ModuleIOSparkFlex implements ModuleIO {
     }
 
     public void updateInputs(ModuleIOInputs inputs) {
-        inputs.drivePositionRad = CleanSparkFlexValue.cleanSparkFlexValue(
+        inputs.drivePositionRad = CleanSparkMaxValue.cleanSparkMaxValue(
                 inputs.drivePositionRad,
                 Units.rotationsToRadians(driveEncoder.getPosition()) / driveAfterEncoderReduction);
-        inputs.driveVelocityRadPerSec = CleanSparkFlexValue.cleanSparkFlexValue(
+        inputs.driveVelocityRadPerSec = CleanSparkMaxValue.cleanSparkMaxValue(
                 inputs.driveVelocityRadPerSec,
                 Units.rotationsPerMinuteToRadiansPerSecond(driveEncoder.getVelocity()) / driveAfterEncoderReduction);
         inputs.driveAppliedVolts = driveSparkFlex.getAppliedOutput() * driveSparkFlex.getBusVoltage();
@@ -118,11 +118,11 @@ public class ModuleIOSparkFlex implements ModuleIO {
                                 * Math.PI)
                         .minus(absoluteEncoderOffset)
                         .getRadians());
-        inputs.turnPositionRad = CleanSparkFlexValue.cleanSparkFlexValue(
+        inputs.turnPositionRad = CleanSparkMaxValue.cleanSparkMaxValue(
                 inputs.turnPositionRad,
                 Units.rotationsToRadians(turnRelativeEncoder.getPosition())
                         / turnAfterEncoderReduction);
-        inputs.turnVelocityRadPerSec = CleanSparkFlexValue.cleanSparkFlexValue(
+        inputs.turnVelocityRadPerSec = CleanSparkMaxValue.cleanSparkMaxValue(
                 inputs.turnVelocityRadPerSec,
                 Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity())
                         / turnAfterEncoderReduction);

@@ -50,7 +50,7 @@ public class RobotContainer {
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
-        },
+        }, "Spark Max",
         ModuleType.SDSMK4iL3,
         new ModuleConfig(1, 2, 9, 0.0),
         new ModuleConfig(3, 4, 10, 0.0),
