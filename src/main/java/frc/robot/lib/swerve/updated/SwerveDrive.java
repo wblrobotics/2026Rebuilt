@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.current.Constants;
 import frc.robot.lib.util.PoseEstimator.TimestampedVisionUpdate;
 
 public class SwerveDrive extends SubsystemBase {
@@ -112,7 +111,7 @@ public class SwerveDrive extends SubsystemBase {
             e.printStackTrace();
         }
 
-        switch (motorController) {
+        switch (this.motorController) {
             case "SparkFlex":
             modules[0] = new Module(new ModuleIOSparkFlex(0, moduleType, flConfig), 0, drivePID, turnPID);
             modules[1] = new Module(new ModuleIOSparkFlex(1, moduleType, frConfig), 1, drivePID, turnPID);
