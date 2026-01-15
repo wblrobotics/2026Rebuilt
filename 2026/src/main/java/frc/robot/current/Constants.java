@@ -25,10 +25,13 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int motorID = 13;
+    public static final int motorID = 30;
     public static final double intakeSpeed = 0.5;
 
   }
-
+  public static class OuttakeConstants {
+    public static final int motorID = 20;
+    public static final double outtake = 0.5;
+  }
 
 }
