@@ -24,8 +24,16 @@ public class VelocityController extends SubsystemBase{
         io.setMotorVoltage(volts);
     }
 
-    public double getVelocity() {
+    public void setPercent(double percent) {
+        io.setPercent(percent);
+    }
+
+    public double getVelocityRadians() {
         return inputs.motorVelocityRadsPerSec;
+    }
+
+    public double getVelocityRPM() {
+        return inputs.motorVelocityRotationPerMinute;
     }
 
     public double[] getCurrent() {

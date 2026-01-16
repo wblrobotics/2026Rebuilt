@@ -30,8 +30,12 @@ public final class Constants {
 
   }
   public static class OuttakeConstants {
-    public static final int motorID = 20;
+    public static final int motorOneId = 20;
+    public static final int motorTwoId = 21;
+    public static final int motorThreeId = 22;
+
     public static final double outtake = 0.5;
+
   }
 
 }

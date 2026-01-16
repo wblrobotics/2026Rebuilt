@@ -1,28 +1,38 @@
 package frc.robot.current.subsystems;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.current.Constants;
-import frc.robot.lib.motors.motorController.MotorController;
-import frc.robot.lib.motors.motorController.MotorIOSparkMax;
+import frc.robot.lib.motors.velocityController.VelocityController;
+import frc.robot.lib.motors.velocityController.VelocityIOSparkMax;
 
-public class Outtake extends SubsystemBase{
-    private MotorController intakeMotor;
+public class Outtake extends SubsystemBase {
+    private VelocityController motorOne;
+    private VelocityController motorTwo;
+    private VelocityController motorThree;
 
-    private final int rightMotorID = Constants.OuttakeConstants.motorID;
+    private final int motorOneId = Constants.OuttakeConstants.motorOneId;
+    private final int motorTwoId = Constants.OuttakeConstants.motorTwoId;
+    private final int motorThreeId = Constants.OuttakeConstants.motorThreeId;
 
     public Outtake(String robotType) {
-        SparkMaxConfig rightConfig = new SparkMaxConfig();
-        rightConfig.inverted(true);
-        rightConfig.smartCurrentLimit(30);
-
+        SparkMaxConfig config = new SparkMaxConfig();
+        config.inverted(true);
+        config.smartCurrentLimit(30);
+        config.closedLoop.feedForward                       // Set PID gains for the velocity controller
+            .kS(0)
+            .kV(0);
+            
 
         switch (robotType) {
             case "Real":
-                intakeMotor = new MotorController(new MotorIOSparkMax(rightMotorID, rightConfig, 35), "Intake", "1");
+                motorOne = new VelocityController(new VelocityIOSparkMax(motorOneId, config), "Outtake", "1");
+                motorTwo = new VelocityController(new VelocityIOSparkMax(motorTwoId, config), "Outtake", "2");
+                motorThree = new VelocityController(new VelocityIOSparkMax(motorThreeId, config), "Outtake", "3");
 
                 break;
             case "SIM":
@@ -30,54 +40,45 @@ public class Outtake extends SubsystemBase{
 
                 break;
             default:
-                intakeMotor = new MotorController(new MotorIOSparkMax(rightMotorID, rightConfig, 30), "Intake", "1");
-                
+                motorOne = new VelocityController(new VelocityIOSparkMax(motorOneId, config), "Outtake", "1");
+                motorTwo = new VelocityController(new VelocityIOSparkMax(motorTwoId, config), "Outtake", "2");
+                motorThree = new VelocityController(new VelocityIOSparkMax(motorThreeId, config), "Outtake", "3");
                 break;
         }
     }
 
     public void periodic() {
-        intakeMotor.updateInputs();
+        motorOne.updateInputs();
+        motorTwo.updateInputs();
+        motorThree.updateInputs();
+
     }
 
     public void setVoltage(double volts) {
-        intakeMotor.setVoltage(volts);
+        motorOne.setVoltage(volts);
+        motorTwo.setVoltage(volts);
+        motorThree.setVoltage(volts);
     }
-    
-    public Command launch() {    
+
+    public Command launch() {
         return Commands.sequence(
-          runOnce(() -> {
-            intakeMotor.setPercent(Constants.OuttakeConstants.outtake);
-          }), 
-          Commands.waitSeconds(.5), 
-          runOnce(() -> {
-            intakeMotor.setPercent(0);
-          })
-        );
+                runOnce(() -> {
+                    motorOne.setVoltage(4);
+                }),
+                Commands.waitSeconds(.5),
+                runOnce(() -> {
+                    motorOne.setVoltage(0);
+                }));
     }
 
-
-
+    /** Stops all the motors */
     public Command stop() {
         return Commands.run(() -> {
-            intakeMotor.setVoltage(0);
-        }, 
-        this);
+            motorOne.setVoltage(0);
+            motorTwo.setVoltage(0);
+            motorThree.setVoltage(0);
+        },
+                this);
     }
-    
 
-    /** Returns a command that runs the intake continuously until the limit switches are pressed then stops. */
-  // public Command continuousIntakeCommand() {
-  //   return Commands.sequence(
-  //     runOnce(() -> {
-  //       intakeMotor.setPercent(Constants.IntakeConstants.intakeSpeed);
-  //     }),
-  //     Commands.waitUntil(() -> intakeMotor.hasCurrentReached() == true || aboveAmpThreshold() == true).withTimeout(10),
-  //     runOnce(() -> {
-  //       if (intakeMotor.hasCurrentReached()) {
-  //       } else {
-  //       }
-  //     })
-  //   );
-  // }
 }
