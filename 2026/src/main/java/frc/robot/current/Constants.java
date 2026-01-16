@@ -34,8 +34,8 @@ public final class Constants {
     public static final int motorTwoId = 21;
     public static final int motorThreeId = 22;
 
-    public static final double outtake = 0.5;
-
+    public static final double kS = 0.0;
+    public static final double kV = 0.0;
   }
 
 }

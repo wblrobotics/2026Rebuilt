@@ -1,6 +1,5 @@
 package frc.robot.current.subsystems;
 
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,9 +22,9 @@ public class Outtake extends SubsystemBase {
         SparkMaxConfig config = new SparkMaxConfig();
         config.inverted(true);
         config.smartCurrentLimit(30);
-        config.closedLoop.feedForward                       // Set PID gains for the velocity controller
-            .kS(0)
-            .kV(0);
+        config.closedLoop.feedForward                       // Set Feedforward gains for the velocity controller
+            .kS(Constants.OuttakeConstants.kS)
+            .kV(Constants.OuttakeConstants.kV);
             
 
         switch (robotType) {
@@ -51,7 +50,6 @@ public class Outtake extends SubsystemBase {
         motorOne.updateInputs();
         motorTwo.updateInputs();
         motorThree.updateInputs();
-
     }
 
     public void setVoltage(double volts) {
@@ -61,24 +59,31 @@ public class Outtake extends SubsystemBase {
     }
 
     public Command launch() {
+        double motorOneSpeed = 4000;
+        double motorTwoSpeed = 4100;
+        double motorThreeSpeed = 3900;
+
         return Commands.sequence(
                 runOnce(() -> {
-                    motorOne.setVoltage(4);
+                    motorOne.setSpeed(motorOneSpeed);
+                    motorTwo.setSpeed(motorTwoSpeed);
+                    motorThree.setSpeed(motorThreeSpeed);
                 }),
-                Commands.waitSeconds(.5),
+                Commands.waitSeconds(2),
                 runOnce(() -> {
-                    motorOne.setVoltage(0);
+                    motorOne.setSpeed(0);
+                    motorTwo.setSpeed(0);
+                    motorThree.setSpeed(0);
                 }));
     }
 
     /** Stops all the motors */
     public Command stop() {
         return Commands.run(() -> {
-            motorOne.setVoltage(0);
-            motorTwo.setVoltage(0);
-            motorThree.setVoltage(0);
+            motorOne.stop();
+            motorTwo.stop();
+            motorThree.stop();
         },
-                this);
+            this);
     }
-
 }
