@@ -137,10 +137,10 @@ public class VisionIOPhotonVision implements VisionIO {
 
         switch (Constants.fieldType) {
             case "Welded": 
-                aprilTagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+                aprilTagField = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
             break;
             case "AndyMark":
-                aprilTagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+                aprilTagField = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
             break;
         }
 
