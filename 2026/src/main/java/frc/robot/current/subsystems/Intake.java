@@ -2,9 +2,9 @@ package frc.robot.current.subsystems;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.networktables.DoubleSubscriber;
-import edu.wpi.first.networktables.TimestampedDouble;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,9 +17,16 @@ import frc.robot.lib.motors.motorController.MotorIOSparkMax;
 public class Intake extends SubsystemBase {
   private MotorController intakeMotor;
 
-  private final int rightMotorID = Constants.IntakeConstants.motorID;
+  //private final NetworkTable table;
+  // private final NetworkTableEntry visionTarget;
 
+  private final int rightMotorID = Constants.IntakeConstants.motorID;
+  
   public Intake(String robotType) {
+    // TODO: change table and entry keys
+    // table = NetworkTableInstance.getDefault().getTable("default");
+    // visionTarget = table.getEntry("default");
+
     SparkMaxConfig rightConfig = new SparkMaxConfig();
     rightConfig.inverted(true);
     rightConfig.smartCurrentLimit(30);
@@ -42,23 +49,6 @@ public class Intake extends SubsystemBase {
 
   public void periodic() {
     intakeMotor.updateInputs();
-
-    /* 
-    // simple get of most recent value; if no value has been published,
-    // returns the default value passed to the subscribe() function
-    double val = dblSub.get();
-    // get the most recent value; if no value has been published, returns
-    // the passed-in default value
-    double val = dblSub.get(-1.0);
-    // subscribers also implement the appropriate Supplier interface, e.g. DoubleSupplier
-    double val = dblSub.getAsDouble();
-    // get the most recent value, along with its timestamp
-    TimestampedDouble tsVal = dblSub.getAtomic();
-    // read all value changes since the last call to readQueue/readQueueValues
-    // readQueue() returns timestamps; readQueueValues() does not.
-    TimestampedDouble[] tsUpdates = dblSub.readQueue();
-    double[] valUpdates = dblSub.readQueueValues();
-    */
   }
 
 
@@ -94,11 +84,12 @@ public class Intake extends SubsystemBase {
   }
 
   // public Boolean ballSpotted(){
-  //       if(){
-  //         return true;         
-  //       } else {
-
+  //   // TODO: validate this
+  //   double visionTargetValue = visionTarget.getDouble(0.0);
+  //   if(visionTargetValue != 0.0){
+  //     return true;
+  //   } else {
   //     return false;
-  //       }
+  //     }
   //   }
 }
