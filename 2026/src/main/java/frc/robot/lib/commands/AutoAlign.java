@@ -28,29 +28,14 @@ public class AutoAlign extends DriveToPose {
         private static Boolean ReefProtection = false;
 
         // Update these locations in FIELD CONSTANTS as needed. Don't mess with angles.
-        public static final Pose2d driverStationOneSource = new Pose2d(
-                        FieldConstants.Source.driverStationOneSource.toTranslation2d(), Rotation2d.fromDegrees(126));
-
-        public static final Pose2d driverStationThreeSource = new Pose2d(
-                        FieldConstants.Source.driverStationThreeSource.toTranslation2d(), Rotation2d.fromDegrees(-126));
-
-        public static final Pose2d northeastReef = new Pose2d(
-                        FieldConstants.ReefSides.northeastReef.toTranslation2d(), Rotation2d.fromDegrees(-120));
-
-        public static final Pose2d northwestReef = new Pose2d(
-                        FieldConstants.ReefSides.northwestReef.toTranslation2d(), Rotation2d.fromDegrees(-60));
-
-        public static final Pose2d westReef = new Pose2d(
-                        FieldConstants.ReefSides.westReef.toTranslation2d(), Rotation2d.fromDegrees(0));
-
-        public static final Pose2d southwestReef = new Pose2d(
-                        FieldConstants.ReefSides.southwestReef.toTranslation2d(), Rotation2d.fromDegrees(60));
-
-        public static final Pose2d southeastReef = new Pose2d(
-                        FieldConstants.ReefSides.southeastReef.toTranslation2d(), Rotation2d.fromDegrees(120));
-
-        public static final Pose2d eastReef = new Pose2d(
-                        FieldConstants.ReefSides.eastReef.toTranslation2d(), Rotation2d.fromDegrees(180));
+        public static final Pose2d hubCenter = new Pose2d(
+                        FieldConstants.Elements.hub, Rotation2d.fromDegrees(0));
+        public static final Pose2d depotCenter = new Pose2d(
+                        FieldConstants.Elements.depot, Rotation2d.fromDegrees(90));
+        public static final Pose2d outpost = new Pose2d(
+                        FieldConstants.Elements.outpost, Rotation2d.fromDegrees(180));
+        
+        
 
         public static enum Target {
                 SOURCE,
@@ -163,10 +148,7 @@ public class AutoAlign extends DriveToPose {
                 // Logger.recordOutput("AutoAlign/PosArr", reefPositions.toArray());
 
 
-                sourcePositions.add(driverStationOneSource);
-                sourcePositions.add(driverStationThreeSource);
-                sourcePositions.add(driverStationOneSource);
-                sourcePositions.add(driverStationThreeSource);
+                
         }
 
         public void periodic() {
