@@ -18,39 +18,24 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOtherControllerPort = 1;
-
-     
   }
 
-  public class PivotConstants {
-    public static final double pivotOffset = -5;
-    // Pivot angles
-    public static final double pivotStoredAngle = 1; //TODO: Get this one. Angle when stored or robot off.
-    public static final double pivotReef = 80 ;
-    public static final double pivotGround = 84;
-    public static final double pivotNetAngle = 140;
-    public static final double pivotPartialStoredAngle = 25;
-    public static final double pivotSource = 23;
-    public static final double pivotStowAway = 170;
+  public static class SwerveConstants {
 
-    public static final double maxAngle = 175;
-    public static final double minAngle = 0;
+  }
 
-    public static boolean algaeDown = false; 
+  public static class IntakeConstants {
+    public static final int motorID = 30;
+    public static final double intakeSpeed = 0.5;
 
-    public static final double kP = 0.15;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+  }
+  public static class OuttakeConstants {
+    public static final int motorOneId = 20;
+    public static final int motorTwoId = 21;
+    public static final int motorThreeId = 22;
+
     public static final double kS = 0.0;
-    public static final double kG = 0.2;
-    public static final double kV = 0.1;
-    public static final double kA = 0.0;
+    public static final double kV = 0.0;
+  }
 
-    // motor constants
-    public static final int algaePivotID = 52;
-    public static final int algaeFlyLeftID = 50;
-    public static final int algaeFlyRightID = 51;
-
-    public static final double algaeConstantThreshold = 1;
-}
 }

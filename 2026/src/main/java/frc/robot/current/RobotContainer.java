@@ -9,11 +9,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.current.Constants.OperatorConstants;
-import frc.robot.current.commands.Autos;
-import frc.robot.current.commands.ExampleCommand;
-import frc.robot.current.subsystems.ExampleFlyWheel;
 import frc.robot.current.subsystems.ExamplePivot;
+import frc.robot.current.subsystems.Intake;
 import frc.robot.current.subsystems.LedOperation;
+import frc.robot.current.subsystems.Outtake;
 import frc.robot.lib.commands.DriveWithController;
 import frc.robot.lib.swerve.updated.GyroIONavX2;
 import frc.robot.lib.swerve.updated.ModuleConfig;
@@ -34,9 +33,10 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   private ExamplePivot exPivot;
-  private ExampleFlyWheel exFly;
   private SwerveDrive swerveDrive;
   private LedOperation leds;
+  private Intake intake;
+  private Outtake outtake;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -49,7 +49,8 @@ public class RobotContainer {
 
     leds = new LedOperation();
     exPivot = new ExamplePivot(Constants.robot);
-    exFly = new ExampleFlyWheel(Constants.robot);
+    intake = new Intake(Constants.robot);
+    outtake = new Outtake(Constants.robot);
 
     swerveDrive = new SwerveDrive(
         20.75,
@@ -94,7 +95,8 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    controlXbox.b().whileTrue(exFly.launch());
+    controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
+    controlXbox.x().onTrue(outtake.launch());
 
     swerveDrive.setDefaultCommand(
         new DriveWithController(swerveDrive, 0.5, 0.25, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),
