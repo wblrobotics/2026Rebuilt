@@ -12,6 +12,7 @@ import frc.robot.current.Constants.OperatorConstants;
 import frc.robot.current.subsystems.ExamplePivot;
 import frc.robot.current.subsystems.Intake;
 import frc.robot.current.subsystems.LedOperation;
+import frc.robot.current.subsystems.Vision;
 import frc.robot.current.subsystems.Outtake;
 import frc.robot.lib.commands.DriveWithController;
 import frc.robot.lib.swerve.updated.GyroIONavX2;
@@ -19,6 +20,7 @@ import frc.robot.lib.swerve.updated.ModuleConfig;
 import frc.robot.lib.swerve.updated.ModuleType;
 import frc.robot.lib.swerve.updated.PIDConfig;
 import frc.robot.lib.swerve.updated.SwerveDrive;
+import frc.robot.lib.vision.VisionIOPhotonVision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -36,6 +38,7 @@ public class RobotContainer {
   private SwerveDrive swerveDrive;
   private LedOperation leds;
   private Intake intake;
+  private Vision vision;
   private Outtake outtake;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -53,8 +56,8 @@ public class RobotContainer {
     outtake = new Outtake(Constants.robot);
 
     swerveDrive = new SwerveDrive(
-        20.75,
-        20.75,
+        24.5,
+        24.5,
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
@@ -63,8 +66,15 @@ public class RobotContainer {
         new ModuleConfig(1, 2, 9, 0.0),
         new ModuleConfig(3, 4, 10, 0.0),
         new ModuleConfig(5, 6, 11, 0.0),
-        new ModuleConfig(7, 8, 12, 2));
+        new ModuleConfig(7, 8, 12, 0));
 
+    vision = new Vision(
+        new VisionIOPhotonVision("0", 0),
+        new VisionIOPhotonVision("1", 1)
+    );
+
+    vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
+    
     // Configure the trigger bindings
     configureBindings();
   }

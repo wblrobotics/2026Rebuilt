@@ -14,6 +14,7 @@ package frc.robot.current;
  */
 public final class Constants {
   public static final String robot = "Real";
+  public static final String fieldType = "welded";
   
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
