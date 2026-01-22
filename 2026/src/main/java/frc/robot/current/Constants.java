@@ -26,10 +26,17 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int motorID = 13;
+    public static final int motorID = 30;
     public static final double intakeSpeed = 0.5;
 
   }
+  public static class OuttakeConstants {
+    public static final int motorOneId = 20;
+    public static final int motorTwoId = 21;
+    public static final int motorThreeId = 22;
 
+    public static final double kS = 0.0;
+    public static final double kV = 0.0;
+  }
 
 }
