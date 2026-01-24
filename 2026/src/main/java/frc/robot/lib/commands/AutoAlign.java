@@ -74,33 +74,33 @@ public class AutoAlign extends DriveToPose {
                                         // Dont slam into reef
                                         Pose2d allianceFlippedDrive = AllianceFlipUtil.apply(drive.getPose());
 
-                                if (ReefProtection) {
-                                        if ((drive.getPose().getY() < FieldConstants.ReefPoints.northPoint.getY() && // If the robot is right of the northmost
-                                                        DriverStation.getAlliance().get() == Alliance.Blue && nearestTarget == driverStationOneSource)||       // point of the BLUE reef
-                                                (drive.getPose().getY() > AllianceFlipUtil.apply(FieldConstants.ReefPoints.northPoint.getY()) &&                                                      // Or if the robot is right of the
-                                                        DriverStation.getAlliance().get() == Alliance.Red && nearestTarget == driverStationOneSource)) {   // northmost point on RED side
+                                // if (ReefProtection) {
+                                //         if ((drive.getPose().getY() < FieldConstants.ReefPoints.northPoint.getY() && // If the robot is right of the northmost
+                                //                         DriverStation.getAlliance().get() == Alliance.Blue && nearestTarget == driverStationOneSource)||       // point of the BLUE reef
+                                //                 (drive.getPose().getY() > AllianceFlipUtil.apply(FieldConstants.ReefPoints.northPoint.getY()) &&                                                      // Or if the robot is right of the
+                                //                         DriverStation.getAlliance().get() == Alliance.Red && nearestTarget == driverStationOneSource)) {   // northmost point on RED side
                                                 
-                                                        nearestTarget = new Pose2d(nearestTarget.getY(),
-                                                                MathUtil.clamp(nearestTarget.getX(),
-                                                                                allianceFlippedDrive.getX(), 2 *
-                                                                                                (allianceFlippedDrive.getX()
-                                                                                                                - FieldConstants.ReefPoints.northPoint
-                                                                                                                                .getX())),
-                                                                nearestTarget.getRotation());
-                                        } else if ((drive.getPose().getY() > FieldConstants.ReefPoints.southPoint.getY() &&  // If the robot is left of the southmost
-                                                        DriverStation.getAlliance().get() == Alliance.Blue && nearestTarget == driverStationThreeSource) ||               // point of the blue reed
-                                                (drive.getPose().getY() < AllianceFlipUtil.apply(FieldConstants.ReefPoints.southPoint.getY()) &&                                                   // or if the robot is left of the southmost
-                                                        DriverStation.getAlliance().get() == Alliance.Red && nearestTarget == driverStationThreeSource)) {
+                                //                         nearestTarget = new Pose2d(nearestTarget.getY(),
+                                //                                 MathUtil.clamp(nearestTarget.getX(),
+                                //                                                 allianceFlippedDrive.getX(), 2 *
+                                //                                                                 (allianceFlippedDrive.getX()
+                                //                                                                                 - FieldConstants.ReefPoints.northPoint
+                                //                                                                                                 .getX())),
+                                //                                 nearestTarget.getRotation());
+                                //         } else if ((drive.getPose().getY() > FieldConstants.ReefPoints.southPoint.getY() &&  // If the robot is left of the southmost
+                                //                         DriverStation.getAlliance().get() == Alliance.Blue && nearestTarget == driverStationThreeSource) ||               // point of the blue reed
+                                //                 (drive.getPose().getY() < AllianceFlipUtil.apply(FieldConstants.ReefPoints.southPoint.getY()) &&                                                   // or if the robot is left of the southmost
+                                //                         DriverStation.getAlliance().get() == Alliance.Red && nearestTarget == driverStationThreeSource)) {
 
-                                                        nearestTarget = new Pose2d(nearestTarget.getY(),
-                                                                MathUtil.clamp(nearestTarget.getX(),
-                                                                                allianceFlippedDrive.getX(), 2 *
-                                                                                                (allianceFlippedDrive.getX()
-                                                                                                                - FieldConstants.ReefPoints.southPoint
-                                                                                                                                .getX())),
-                                                                nearestTarget.getRotation());
-                                        }
-                                }
+                                //                         nearestTarget = new Pose2d(nearestTarget.getY(),
+                                //                                 MathUtil.clamp(nearestTarget.getX(),
+                                //                                                 allianceFlippedDrive.getX(), 2 *
+                                //                                                                 (allianceFlippedDrive.getX()
+                                //                                                                                 - FieldConstants.ReefPoints.southPoint
+                                //                                                                                                 .getX())),
+                                //                                 nearestTarget.getRotation());
+                                //         }
+                                // }
 
                                         // // Dont slam into subwoofer
                                         // if ((target.get() == Target.SOURCE || target.get() == Target.REEF) &&
@@ -173,7 +173,7 @@ public class AutoAlign extends DriveToPose {
                                                                 new Rotation2d(0)));*/
                                 updatedPose = originalPose.transformBy(
                                         new Transform2d(0,
-                                                        (FieldConstants.postDistance / 2),
+                                                        (12 / 2),
                                                         new Rotation2d(0)));
                                 break;
                         case RIGHT:
@@ -183,7 +183,7 @@ public class AutoAlign extends DriveToPose {
                                                                 new Rotation2d(0))); */
                                 updatedPose = originalPose.transformBy(
                                         new Transform2d(0,
-                                                        -1 * (FieldConstants.postDistance / 2),
+                                                        -1 * (12 / 2),
                                                         new Rotation2d(0)));
                                 break;
                         case CENTER:
