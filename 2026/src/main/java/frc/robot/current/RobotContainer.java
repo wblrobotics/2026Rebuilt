@@ -50,11 +50,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    leds = new LedOperation();
-    exPivot = new ExamplePivot(Constants.robot);
-    intake = new Intake(Constants.robot);
-    outtake = new Outtake(Constants.robot);
-
     swerveDrive = new SwerveDrive(
         29.75,
         14.75,
@@ -72,6 +67,11 @@ public class RobotContainer {
         new VisionIOPhotonVision("0", 0),
         new VisionIOPhotonVision("1", 1)
     );
+
+    leds = new LedOperation();
+    exPivot = new ExamplePivot(Constants.robot);
+    intake = new Intake(Constants.robot, swerveDrive);
+    outtake = new Outtake(Constants.robot, swerveDrive);
 
     vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
     

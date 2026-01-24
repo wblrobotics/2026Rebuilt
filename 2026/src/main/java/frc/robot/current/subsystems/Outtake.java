@@ -8,17 +8,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.current.Constants;
 import frc.robot.lib.motors.velocityController.VelocityController;
 import frc.robot.lib.motors.velocityController.VelocityIOSparkMax;
+import frc.robot.lib.swerve.updated.SwerveDrive;
 
 public class Outtake extends SubsystemBase {
     private VelocityController motorOne;
     private VelocityController motorTwo;
-    private VelocityController motorThree;
 
     private final int motorOneId = Constants.OuttakeConstants.motorOneId;
     private final int motorTwoId = Constants.OuttakeConstants.motorTwoId;
-    private final int motorThreeId = Constants.OuttakeConstants.motorThreeId;
 
-    public Outtake(String robotType) {
+    public Outtake(String robotType, SwerveDrive drive) {
         SparkMaxConfig config = new SparkMaxConfig();
         config.inverted(true);
         config.smartCurrentLimit(30);
@@ -31,7 +30,6 @@ public class Outtake extends SubsystemBase {
             case "Real":
                 motorOne = new VelocityController(new VelocityIOSparkMax(motorOneId, config), "Outtake", "1");
                 motorTwo = new VelocityController(new VelocityIOSparkMax(motorTwoId, config), "Outtake", "2");
-                motorThree = new VelocityController(new VelocityIOSparkMax(motorThreeId, config), "Outtake", "3");
 
                 break;
             case "SIM":
@@ -41,7 +39,6 @@ public class Outtake extends SubsystemBase {
             default:
                 motorOne = new VelocityController(new VelocityIOSparkMax(motorOneId, config), "Outtake", "1");
                 motorTwo = new VelocityController(new VelocityIOSparkMax(motorTwoId, config), "Outtake", "2");
-                motorThree = new VelocityController(new VelocityIOSparkMax(motorThreeId, config), "Outtake", "3");
                 break;
         }
     }
@@ -49,31 +46,26 @@ public class Outtake extends SubsystemBase {
     public void periodic() {
         motorOne.updateInputs();
         motorTwo.updateInputs();
-        motorThree.updateInputs();
     }
 
     public void setVoltage(double volts) {
         motorOne.setVoltage(volts);
         motorTwo.setVoltage(volts);
-        motorThree.setVoltage(volts);
     }
 
     public Command launch() {
         double motorOneSpeed = 4000;
         double motorTwoSpeed = 4100;
-        double motorThreeSpeed = 3900;
 
         return Commands.sequence(
                 runOnce(() -> {
                     motorOne.setSpeed(motorOneSpeed);
                     motorTwo.setSpeed(motorTwoSpeed);
-                    motorThree.setSpeed(motorThreeSpeed);
                 }),
                 Commands.waitSeconds(2),
                 runOnce(() -> {
                     motorOne.setSpeed(0);
                     motorTwo.setSpeed(0);
-                    motorThree.setSpeed(0);
                 }));
     }
 
@@ -82,7 +74,6 @@ public class Outtake extends SubsystemBase {
         return Commands.run(() -> {
             motorOne.stop();
             motorTwo.stop();
-            motorThree.stop();
         },
             this);
     }

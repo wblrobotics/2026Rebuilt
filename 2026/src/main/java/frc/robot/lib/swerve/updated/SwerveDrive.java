@@ -1,5 +1,6 @@
 package frc.robot.lib.swerve.updated;
 
+import java.lang.annotation.Target;
 import java.util.List;
 
 import org.littletonrobotics.junction.Logger;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.geometry.Twist3d;
@@ -450,5 +452,10 @@ public class SwerveDrive extends SubsystemBase {
                 new Translation2d(-TrackWidthX / 2.0, TrackWidthY / 2.0),
                 new Translation2d(-TrackWidthX / 2.0, -TrackWidthY / 2.0)
         };
+    }
+    
+    public Transform2d targetOffset(Pose2d target) {
+        
+        return this.getPose().minus(target);
     }
 }
