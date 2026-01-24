@@ -56,13 +56,13 @@ public class RobotContainer {
     outtake = new Outtake(Constants.robot);
 
     swerveDrive = new SwerveDrive(
-        24.5,
-        24.5,
+        29.75,
+        14.75,
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
-        }, "Spark Max",
-        ModuleType.SDSMK4iL3,
+        }, "Spark Flex",
+        ModuleType.SDSMK5iR3,
         new ModuleConfig(1, 2, 9, 0.0),
         new ModuleConfig(3, 4, 10, 0.0),
         new ModuleConfig(5, 6, 11, 0.0),
