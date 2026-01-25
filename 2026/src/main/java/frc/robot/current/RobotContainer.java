@@ -4,6 +4,9 @@
 
 package frc.robot.current;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -68,10 +71,32 @@ public class RobotContainer {
         new ModuleConfig(5, 6, 11, 0.0),
         new ModuleConfig(7, 8, 12, 0));
 
-    vision = new Vision(
-        new VisionIOPhotonVision("0", 0),
-        new VisionIOPhotonVision("1", 1)
-    );
+        vision = new Vision(
+          // Left Module
+          new VisionIOPhotonVision("Left Module", 
+            new Pose3d(
+              Units.inchesToMeters(7.375),
+              Units.inchesToMeters(10.875),
+              Units.inchesToMeters(12),
+              new Rotation3d(0, Units.degreesToRadians(-11), Units.degreesToRadians(-11)))
+          ),
+          // Right Module
+          new VisionIOPhotonVision("Right Module", 
+            new Pose3d(
+              Units.inchesToMeters(7.375),
+              Units.inchesToMeters(-10.875),
+              Units.inchesToMeters(11.5),
+              new Rotation3d(0, Units.degreesToRadians(11), Units.degreesToRadians(11)))
+          ),
+          // Backup Cam
+          new VisionIOPhotonVision("Backup Cam", 
+            new Pose3d(
+              Units.inchesToMeters(-0.5),
+              Units.inchesToMeters(-5),
+              Units.inchesToMeters(37.5),
+              new Rotation3d(5, 0, 175))
+          ));
+    
 
     vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
     
