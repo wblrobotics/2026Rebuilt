@@ -46,7 +46,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController controlXbox = new CommandXboxController(OperatorConstants.kOtherControllerPort);
+  //private final CommandXboxController controlXbox = new CommandXboxController(OperatorConstants.kOtherControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -54,9 +54,9 @@ public class RobotContainer {
   public RobotContainer() {
 
     leds = new LedOperation();
-    exPivot = new ExamplePivot(Constants.robot);
-    intake = new Intake(Constants.robot);
-    outtake = new Outtake(Constants.robot);
+    //exPivot = new ExamplePivot(Constants.robot);
+    //intake = new Intake(Constants.robot);
+    //outtake = new Outtake(Constants.robot);
 
     swerveDrive = new SwerveDrive(
         24.5,
@@ -64,16 +64,16 @@ public class RobotContainer {
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
-        }, "Spark Max",
+        }, "SparkMax",
         ModuleType.SDSMK4iL3,
-        new ModuleConfig(1, 2, 9, 0.0),
-        new ModuleConfig(3, 4, 10, 0.0),
-        new ModuleConfig(5, 6, 11, 0.0),
-        new ModuleConfig(7, 8, 12, 0));
+        new ModuleConfig(2, 1, 9, -62),
+        new ModuleConfig(4, 3, 10, 120),
+        new ModuleConfig(8, 7, 12, -40),
+        new ModuleConfig(6, 5, 11, -15));
 
         vision = new Vision(
           // Left Module
-          new VisionIOPhotonVision("Left Module", 
+          new VisionIOPhotonVision("Camera 2", 
             new Pose3d(
               Units.inchesToMeters(7.375),
               Units.inchesToMeters(10.875),
@@ -81,7 +81,7 @@ public class RobotContainer {
               new Rotation3d(0, Units.degreesToRadians(-11), Units.degreesToRadians(-11)))
           ),
           // Right Module
-          new VisionIOPhotonVision("Right Module", 
+          new VisionIOPhotonVision("Camera 3", 
             new Pose3d(
               Units.inchesToMeters(7.375),
               Units.inchesToMeters(-10.875),
@@ -89,7 +89,7 @@ public class RobotContainer {
               new Rotation3d(0, Units.degreesToRadians(11), Units.degreesToRadians(11)))
           ),
           // Backup Cam
-          new VisionIOPhotonVision("Backup Cam", 
+          new VisionIOPhotonVision("Camera 4", 
             new Pose3d(
               Units.inchesToMeters(-0.5),
               Units.inchesToMeters(-5),
@@ -121,20 +121,20 @@ public class RobotContainer {
   private void configureBindings() {
 
 
-        exPivot.setDefaultCommand(
-          Commands.run(() -> {
-            exPivot.adjustHeight(-1 * controlXbox.getLeftY());
-          },
-            exPivot));
+        // exPivot.setDefaultCommand(
+        //   Commands.run(() -> {
+        //     exPivot.adjustHeight(-1 * controlXbox.getLeftY());
+        //   },
+        //     exPivot));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
-    controlXbox.x().onTrue(outtake.launch());
+    //controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
+    //controlXbox.x().onTrue(outtake.launch());
 
     swerveDrive.setDefaultCommand(
-        new DriveWithController(swerveDrive, 0.5, 0.25, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),
+        new DriveWithController(swerveDrive, 0.5, 0.5, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),
             () -> driveXbox.getRightX(), () -> driveXbox.getRightY(), () -> driveXbox.a().getAsBoolean()));
     driveXbox.x().onTrue(Commands.runOnce(swerveDrive::stopWithX, swerveDrive));
   }
