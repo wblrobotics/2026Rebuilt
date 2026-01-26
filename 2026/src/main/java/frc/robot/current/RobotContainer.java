@@ -15,7 +15,6 @@ import frc.robot.current.Constants.OperatorConstants;
 import frc.robot.current.subsystems.ExamplePivot;
 import frc.robot.current.subsystems.Intake;
 import frc.robot.current.subsystems.LedOperation;
-import frc.robot.current.subsystems.Vision;
 import frc.robot.current.subsystems.Outtake;
 import frc.robot.lib.commands.DriveWithController;
 import frc.robot.lib.swerve.updated.GyroIONavX2;
@@ -24,6 +23,7 @@ import frc.robot.lib.swerve.updated.ModuleType;
 import frc.robot.lib.swerve.updated.PIDConfig;
 import frc.robot.lib.swerve.updated.SwerveDrive;
 import frc.robot.lib.vision.VisionIOPhotonVision;
+import frc.robot.lib.vision.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
