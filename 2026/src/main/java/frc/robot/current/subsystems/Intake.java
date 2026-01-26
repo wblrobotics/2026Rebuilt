@@ -18,9 +18,6 @@ import frc.robot.lib.swerve.updated.SwerveDrive;
 public class Intake extends SubsystemBase {
   private MotorController intakeMotor;
 
-  //private final NetworkTable table;
-  // private final NetworkTableEntry visionTarget;
-
   private final int rightMotorID = Constants.IntakeConstants.motorID;
   
   public Intake(String robotType, SwerveDrive drive) {
@@ -83,14 +80,4 @@ public class Intake extends SubsystemBase {
     },
         this);
   }
-
-  // public Boolean ballSpotted(){
-  //   // TODO: validate this
-  //   double visionTargetValue = visionTarget.getDouble(0.0);
-  //   if(visionTargetValue != 0.0){
-  //     return true;
-  //   } else {
-  //     return false;
-  //     }
-  //   }
 }

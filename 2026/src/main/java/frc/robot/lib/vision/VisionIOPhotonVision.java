@@ -18,11 +18,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.current.Constants;
 import frc.robot.current.Robot;
@@ -32,9 +30,6 @@ public class VisionIOPhotonVision implements VisionIO {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;
-
-    private static final Pose3d[] cameraPoses;
-    private static final String[] cameraIdentifiers;
     
     // Simulation
     private PhotonCameraSim cameraSim;
@@ -42,81 +37,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
     private AprilTagFieldLayout aprilTagField;
 
-    // Camera locations
-    static {
-        switch (Constants.robot) {
-            case "SIM":
-                cameraPoses = 
-                    
-                    new Pose3d[] {
-                        // Left Module
-                        new Pose3d(
-                            Units.inchesToMeters(24.25/2), // Forward
-                            Units.inchesToMeters(24.25/2), // Left
-                            Units.inchesToMeters(8.625),
-                            new Rotation3d(0, Units.degreesToRadians(11), Units.degreesToRadians(-12))
-                        ),
-                        // Right Module
-                        new Pose3d(
-                            Units.inchesToMeters(24.25/2), // Forward
-                            Units.inchesToMeters(-24.25/2), // Right
-                            Units.inchesToMeters(8.625),
-                            new Rotation3d(0, Units.degreesToRadians(11), Units.degreesToRadians(12))
-                        ),
-                        // Backup cam       
-                        new Pose3d(
-                            Units.inchesToMeters(0), //Forward
-                            Units.inchesToMeters(0), // Left
-                            Units.inchesToMeters(37.875), // UP
-                            new Rotation3d(0,0,0)
-                ),
-                    };
-                cameraIdentifiers =
-                    new String[] {
-                        "Camera2",
-                        "Camera3",
-                        "Camera4"
-                    };
-                break;
-            case "Real":
-            cameraPoses = 
-            new Pose3d[] {
-                // Left Module
-                new Pose3d(
-                    Units.inchesToMeters(7.375), // Forward
-                    Units.inchesToMeters(10.875), // Left
-                    Units.inchesToMeters(12),
-                    new Rotation3d(0, Units.degreesToRadians(-11), Units.degreesToRadians(-11))
-                ),
-                // Right Module
-                new Pose3d(
-                    Units.inchesToMeters(7.375), // Forward
-                    Units.inchesToMeters(-10.875), // Right
-                    Units.inchesToMeters(11.5),
-                    new Rotation3d(0, Units.degreesToRadians(11), Units.degreesToRadians(11))
-                ),
-                // Backup cam
-                new Pose3d(
-                    Units.inchesToMeters(-.5), //Back
-                    Units.inchesToMeters(-5), // Right
-                    Units.inchesToMeters(37.5), // UP
-                    new Rotation3d(5,0,175)
-                ),
-                };
-                cameraIdentifiers = new String[] {
-                    "Camera2",
-                    "Camera3",
-                    "Camera4"
-                };
-                break;
-            default:
-                cameraPoses = new Pose3d[] {};
-                cameraIdentifiers = new String[] {};
-                break;
-        }
-    }
-
-    public VisionIOPhotonVision(String identifier, int instance) {
+    public VisionIOPhotonVision(String cameraName, Pose3d cameraPose3d) {
 
         switch (Constants.fieldType) {
             case "Welded": 
@@ -127,11 +48,11 @@ public class VisionIOPhotonVision implements VisionIO {
             break;
         }
 
-        System.out.println("[Init] Creating VisionIOPhotonVision " + identifier + " with camera (" + cameraIdentifiers[instance] + ")");
-        camera = new PhotonCamera(cameraIdentifiers[instance]);
+        System.out.println("[Init] Creating VisionIOPhotonVision Camera: " + cameraName);
+        camera = new PhotonCamera(cameraName);
 
         photonEstimator = 
-            new PhotonPoseEstimator(aprilTagField, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Pose3d(), cameraPoses[instance]));
+            new PhotonPoseEstimator(aprilTagField, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Pose3d(), cameraPose3d));
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         // Simulation
@@ -151,7 +72,7 @@ public class VisionIOPhotonVision implements VisionIO {
             cameraSim = new PhotonCameraSim(camera, cameraProp);
 
             // Add the simulated camera to view the targets on the simulated field
-            visionSim.addCamera(cameraSim, new Transform3d(new Pose3d(), cameraPoses[instance]));
+            visionSim.addCamera(cameraSim, new Transform3d(new Pose3d(), cameraPose3d));
 
             cameraSim.enableDrawWireframe(true);
         }
