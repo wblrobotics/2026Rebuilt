@@ -51,27 +51,26 @@ public class RobotContainer {
   public RobotContainer() {
 
     swerveDrive = new SwerveDrive(
-        29.75,
-        14.75,
+        21.5,    // 2026 29.75
+        21.5,    // 2026 14.75
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
-        }, "Spark Flex",
-        ModuleType.SDSMK5iR3,
+        }, "SparkMax",
+        ModuleType.SDSMK4iL3,
         new ModuleConfig(1, 2, 9, 0.0),
         new ModuleConfig(3, 4, 10, 0.0),
         new ModuleConfig(5, 6, 11, 0.0),
         new ModuleConfig(7, 8, 12, 0));
 
     vision = new Vision(
-        new VisionIOPhotonVision("0", 0),
-        new VisionIOPhotonVision("1", 1)
+        new VisionIOPhotonVision("0", 0)
     );
 
     leds = new LedOperation();
-    exPivot = new ExamplePivot(Constants.robot);
-    intake = new Intake(Constants.robot, swerveDrive);
-    outtake = new Outtake(Constants.robot, swerveDrive);
+    //exPivot = new ExamplePivot(Constants.robot);
+    //intake = new Intake(Constants.robot, swerveDrive);
+    //outtake = new Outtake(Constants.robot, swerveDrive);
 
     vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
     
@@ -96,17 +95,17 @@ public class RobotContainer {
   private void configureBindings() {
 
 
-        exPivot.setDefaultCommand(
-          Commands.run(() -> {
-            exPivot.adjustHeight(-1 * controlXbox.getLeftY());
-          },
-            exPivot));
+        // exPivot.setDefaultCommand(
+        //   Commands.run(() -> {
+        //     exPivot.adjustHeight(-1 * controlXbox.getLeftY());
+        //   },
+        //     exPivot));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
-    controlXbox.x().onTrue(outtake.launch());
+    //controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
+    //controlXbox.x().onTrue(outtake.launch());
 
     swerveDrive.setDefaultCommand(
         new DriveWithController(swerveDrive, 0.5, 0.25, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),

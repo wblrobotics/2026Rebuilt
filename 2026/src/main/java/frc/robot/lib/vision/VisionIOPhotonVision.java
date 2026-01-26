@@ -73,9 +73,9 @@ public class VisionIOPhotonVision implements VisionIO {
                     };
                 cameraIdentifiers =
                     new String[] {
-                        "LeftModule",
-                        "rightModule",
-                        "backupCam"
+                        "Camera2",
+                        "Camera3",
+                        "Camera4"
                     };
                 break;
             case "Real":
@@ -104,9 +104,9 @@ public class VisionIOPhotonVision implements VisionIO {
                 ),
                 };
                 cameraIdentifiers = new String[] {
-                    "LeftModule",
-                    "RightModule",
-                    "BackupCam"
+                    "Camera2",
+                    "Camera3",
+                    "Camera4"
                 };
                 break;
             default:
