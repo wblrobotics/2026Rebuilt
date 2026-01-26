@@ -76,4 +76,3 @@ public class Intake extends SubsystemBase {
         this);
   }
 }
-}
