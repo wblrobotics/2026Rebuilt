@@ -80,6 +80,8 @@ public class FieldConstants {
       4
     );
 
+    public static Pose2d hubPose = new Pose2d(hub, new Rotation2d(0.0));
+
   }
 
 
