@@ -17,16 +17,9 @@ import frc.robot.lib.motors.motorController.MotorIOSparkMax;
 public class Intake extends SubsystemBase {
   private MotorController intakeMotor;
 
-  //private final NetworkTable table;
-  // private final NetworkTableEntry visionTarget;
-
   private final int rightMotorID = Constants.IntakeConstants.motorID;
   
   public Intake(String robotType) {
-    // TODO: change table and entry keys
-    // table = NetworkTableInstance.getDefault().getTable("default");
-    // visionTarget = table.getEntry("default");
-
     SparkMaxConfig rightConfig = new SparkMaxConfig();
     rightConfig.inverted(true);
     rightConfig.smartCurrentLimit(30);
@@ -82,14 +75,4 @@ public class Intake extends SubsystemBase {
     },
         this);
   }
-
-  // public Boolean ballSpotted(){
-  //   // TODO: validate this
-  //   double visionTargetValue = visionTarget.getDouble(0.0);
-  //   if(visionTargetValue != 0.0){
-  //     return true;
-  //   } else {
-  //     return false;
-  //     }
-  //   }
 }
