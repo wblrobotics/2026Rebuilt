@@ -64,21 +64,12 @@ public class RobotContainer {
         new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
         new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
-<<<<<<< HEAD
-        }, "Spark Flex",
+        }, "SparkFlex",
         ModuleType.SDSMK5iR3,
         new ModuleConfig(1, 2, 9, 0.0),
         new ModuleConfig(3, 4, 10, 0.0),
         new ModuleConfig(5, 6, 11, 0.0),
         new ModuleConfig(7, 8, 12, 0));
-=======
-        }, "SparkMax",
-        ModuleType.SDSMK4iL3,
-        new ModuleConfig(2, 1, 9, -62),
-        new ModuleConfig(4, 3, 10, 120),
-        new ModuleConfig(8, 7, 12, -40),
-        new ModuleConfig(6, 5, 11, -15));
->>>>>>> cc40f478120fce0a9e23824c9d4afda3e24099a0
 
         vision = new Vision(
           // Left Module
