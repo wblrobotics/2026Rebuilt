@@ -53,7 +53,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    leds = new LedOperation();
+    //leds = new LedOperation();
     //exPivot = new ExamplePivot(Constants.robot);
     //intake = new Intake(Constants.robot);
     //outtake = new Outtake(Constants.robot);
@@ -98,7 +98,7 @@ public class RobotContainer {
           ));
     
 
-    vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
+    //vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
     
     // Configure the trigger bindings
     configureBindings();
