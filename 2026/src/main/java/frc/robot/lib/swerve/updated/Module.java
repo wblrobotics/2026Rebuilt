@@ -25,10 +25,8 @@ public class Module {
     private double turnKd;
 
     private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
-    private final PIDController driveFeedback =
-        new PIDController(0.9, 0.0, 0.0, 0.02);
-    private final PIDController turnFeedback =
-        new PIDController(23.0, 0.0, 0.0, 0.02);
+    private final PIDController driveFeedback = new PIDController(0.9, 0.0, 0.0, 0.02);
+    private final PIDController turnFeedback = new PIDController(23.0, 0.0, 0.0, 0.02);
 
     public Module(ModuleIO io, int moduleNumber, PIDConfig drivePID, PIDConfig turnPID) {
         System.out.println("[Init] Creating module " + Integer.toString(moduleNumber));
@@ -37,7 +35,8 @@ public class Module {
 
         turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
 
-        // These values have not yet been tuned. They are pulled from 6328's 2023 competition code. Expect changes to be required.
+        // These values have not yet been tuned. They are pulled from 6328's 2023
+        // competition code. Expect changes to be required.
         switch (Constants.robot) {
             case "SIM":
                 this.driveKp = 0.9;
@@ -75,7 +74,8 @@ public class Module {
     }
 
     /**
-     * Runs the module using setpoints provided by a SwerveModuleState while optimizing the angle.
+     * Runs the module using setpoints provided by a SwerveModuleState while
+     * optimizing the angle.
      * 
      * @param state Setpoint in the form of a SwerveModuleState.
      * 
@@ -83,13 +83,14 @@ public class Module {
      */
     public SwerveModuleState runSetpoint(SwerveModuleState state) {
         // Optimize state based on current angle
-        // This avoids "taking the long road" to a module angle. (270 degrees to 0 degrees should only be a 90 degree route, not 270.)
+        // This avoids "taking the long road" to a module angle. (270 degrees to 0
+        // degrees should only be a 90 degree route, not 270.)
         state.optimize(getAngle());
-        //var optimizedState = SwerveModuleState.optimize(state, getAngle());
+        // var optimizedState = SwerveModuleState.optimize(state, getAngle());
 
         // Run turn controller
         io.setTurnVoltage(
-            turnFeedback.calculate(getAngle().getRadians(), state.angle.getRadians()));
+                turnFeedback.calculate(getAngle().getRadians(), state.angle.getRadians()));
 
         // Update velocity based on turn error
         state.speedMetersPerSecond *= Math.cos(turnFeedback.getError());
@@ -97,28 +98,41 @@ public class Module {
         // Run drive controller
         double velocityRadPerSec = state.speedMetersPerSecond / wheelRadius;
         io.setDriveVoltage(
-        driveFeedforward.calculate(velocityRadPerSec)
-            + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+                driveFeedforward.calculate(velocityRadPerSec)
+                        + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
 
         return state;
     }
 
     /**
-     * Sends a voltage value to the drive motor of a module while maintaining closed loop control with an angle setpoint of 0.0 on the turn motor.
+     * Sends a voltage value to either motor of a module while maintaining closed
+     * loop control with an angle or velocity setpoint of 0.0 on the opposite motor.
      * 
      * @param volts Voltage to be sent to the drive motor.
      */
-    public void runDriveCharacterization(double volts) {
-        // Closed loop control of module rotation
-        io.setTurnVoltage(
-            turnFeedback.calculate(getAngle().getRadians(), 0.0));
+    public void runCharacterization(double volts, String sysIDType) {
+        switch (sysIDType) {
+            case "drive":
+                // Closed loop control of module rotation
+                io.setTurnVoltage(
+                        turnFeedback.calculate(getAngle().getRadians(), 0.0));
 
-        // Open loop control of module drive
-        io.setDriveVoltage(volts);
+                // Open loop control of module drive
+                io.setDriveVoltage(volts);
+                break;
+            case "rotation":
+                // Open loop control of the module rotation
+                io.setTurnVoltage(volts);
+
+                // Closed loop control of the module drive
+                io.setDriveVoltage(driveFeedback.calculate(getVelocityMetersPerSec(), 0.0));
+                break;
+        }
     }
 
     /**
-     * Sends a voltage value to the turn motor of a module while maintaining closed loop control with an velocity setpoint of 0.0 on the drive motor.
+     * Sends a voltage value to the turn motor of a module while maintaining closed
+     * loop control with an velocity setpoint of 0.0 on the drive motor.
      * 
      * @param volts Voltage to be sent to the turn motor.
      */

@@ -147,16 +147,7 @@ public class SwerveDrive extends SubsystemBase {
                 new SysIdRoutine.Mechanism(
                         (voltage) -> {
                             for (int i = 0; i < 4; i++) {
-                                switch (Constants.moduleSysId) {
-                                    case "drive":
-                                        modules[i]
-                                                .runDriveCharacterization(voltage.in(edu.wpi.first.units.Units.Volts));
-                                        break;
-                                    case "rotation":
-                                        modules[i].runRotationCharacterization(
-                                                voltage.in(edu.wpi.first.units.Units.Volts));
-                                        break;
-                                }
+                                modules[i].runCharacterization(voltage.in(edu.wpi.first.units.Units.Volts), Constants.moduleSysId);
                             }
                         },
                         null,

@@ -17,10 +17,19 @@ public final class Constants {
   public static final String fieldType = "welded";
 
   public static final boolean isTuningMode = true;
-  public final static String moduleSysId = "rotation";
+
+  /**
+   * This is how the SysID knows which motor on the module to test.See the example command to run a sysId test,
+   * and see how the String is used to determine the SysID test
+   * 
+   * @see
+   * {@link frc.robot.lib.swerve.updated.SwerveDrive}
+   * {@link frc.robot.lib.swerve.updated.SwerveDrive#sysIdQuasistatic(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction)}
+   * {@link frc.robot.lib.swerve.updated.Module#runCharacterization()
+   */
+  public final static String moduleSysId = "rotation"; // Either rotation or drive
 
 
-  
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOtherControllerPort = 1;
