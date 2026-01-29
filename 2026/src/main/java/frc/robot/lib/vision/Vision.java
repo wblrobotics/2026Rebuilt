@@ -26,6 +26,10 @@ public class Vision extends SubsystemBase {
     private Map<Integer, Double> lastFrameTimes = new HashMap<>();
     //private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
 
+    /** 
+     * @param io The list of vision io objects (cameras)
+     * 
+     */
     public Vision(VisionIO... io) {
         System.out.println("[Init] Creating Vision");
         this.io = io;

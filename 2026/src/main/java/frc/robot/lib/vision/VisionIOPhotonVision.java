@@ -39,6 +39,12 @@ public class VisionIOPhotonVision implements VisionIO {
 
     private boolean detectsFuel;
 
+    /**
+     * 
+     * @param cameraName The name of the camera found in photonvision
+     * @param cameraPose3d The location of the robot relative to it's center
+     */
+
     public VisionIOPhotonVision(String cameraName, Pose3d cameraPose3d) {
 
         switch (Constants.fieldType) {
