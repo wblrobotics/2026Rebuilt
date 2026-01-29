@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.current.Constants;
 import frc.robot.lib.util.PoseEstimator.TimestampedVisionUpdate;
 
 public class SwerveDrive extends SubsystemBase {
@@ -38,7 +39,6 @@ public class SwerveDrive extends SubsystemBase {
     private double maxAngularSpeed;
 
     private String motorController;
-
 
     public static final double coastThresholdMetersPerSec = 0.05; // Need to be under this to switch to coast while
                                                                   // disabling
@@ -75,20 +75,24 @@ public class SwerveDrive extends SubsystemBase {
 
     /**
      * 
-     * @param trackWidthX The width from the center of the left wheels to the center of the right wheels in inches
-     * @param trackWidthY The width from the center of the front wheels to the center of the back wheels in inches
-     * @param drivePID The PID constants for linear motion
-     * @param turnPID The PID constants for angular motion
-     * @param gyroIO What IO you'd like to use for the gyroscope
-     * @param motorController A string for the type of motor controller used "Spark Flex", "Spark Max", etc
-     * @param moduleType The model of module you are using. 
-     * @param flConfig The config you would like to use for this module
-     * @param frConfig The config you would like to use for this module
-     * @param blConfig The config you would like to use for this module
-     * @param brConfig The config you would like to use for this module
+     * @param trackWidthX     The width from the center of the left wheels to the
+     *                        center of the right wheels in inches
+     * @param trackWidthY     The width from the center of the front wheels to the
+     *                        center of the back wheels in inches
+     * @param drivePID        The PID constants for linear motion
+     * @param turnPID         The PID constants for angular motion
+     * @param gyroIO          What IO you'd like to use for the gyroscope
+     * @param motorController A string for the type of motor controller used "Spark
+     *                        Flex", "Spark Max", etc
+     * @param moduleType      The model of module you are using.
+     * @param flConfig        The config you would like to use for this module
+     * @param frConfig        The config you would like to use for this module
+     * @param blConfig        The config you would like to use for this module
+     * @param brConfig        The config you would like to use for this module
      */
-    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO, String motorController, ModuleType moduleType,
-                        ModuleConfig flConfig, ModuleConfig frConfig, ModuleConfig blConfig, ModuleConfig brConfig) {
+    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO,
+            String motorController, ModuleType moduleType,
+            ModuleConfig flConfig, ModuleConfig frConfig, ModuleConfig blConfig, ModuleConfig brConfig) {
 
         System.out.println("[Init] Creating SwerveDrive");
 
@@ -97,9 +101,11 @@ public class SwerveDrive extends SubsystemBase {
 
         kinematics = new SwerveDriveKinematics(getModuleTranslations());
 
-        this.maxLinearSpeed = Units.feetToMeters(moduleType.maxSpeed()); 
+        this.maxLinearSpeed = Units.feetToMeters(moduleType.maxSpeed());
         this.maxAngularSpeed = Math.PI;
-        // this.maxAngularSpeed = maxLinearSpeed / Arrays.stream(getModuleTranslations()).map(translation -> translation.getNorm())
+        // this.maxAngularSpeed = maxLinearSpeed /
+        // Arrays.stream(getModuleTranslations()).map(translation ->
+        // translation.getNorm())
         // .max(Double::compare).get();
         this.gyroIO = gyroIO;
         this.motorController = motorController;
@@ -113,15 +119,17 @@ public class SwerveDrive extends SubsystemBase {
 
         switch (this.motorController) {
             case "SparkFlex":
-            modules[0] = new Module(new ModuleIOSparkFlex(0, moduleType, flConfig), 0, drivePID, turnPID);
-            modules[1] = new Module(new ModuleIOSparkFlex(1, moduleType, frConfig), 1, drivePID, turnPID);
-            modules[2] = new Module(new ModuleIOSparkFlex(2, moduleType, blConfig), 2, drivePID, turnPID);
-            modules[3] = new Module(new ModuleIOSparkFlex(3, moduleType, brConfig), 3, drivePID, turnPID);
+                modules[0] = new Module(new ModuleIOSparkFlex(0, moduleType, flConfig), 0, drivePID, turnPID);
+                modules[1] = new Module(new ModuleIOSparkFlex(1, moduleType, frConfig), 1, drivePID, turnPID);
+                modules[2] = new Module(new ModuleIOSparkFlex(2, moduleType, blConfig), 2, drivePID, turnPID);
+                modules[3] = new Module(new ModuleIOSparkFlex(3, moduleType, brConfig), 3, drivePID, turnPID);
+                break;
             case "SparkMax":
-            modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
-            modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
-            modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
-            modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
+                modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
+                modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
+                modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
+                modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
+                break;
         }
 
         lastMovementTimer.start();
@@ -139,7 +147,16 @@ public class SwerveDrive extends SubsystemBase {
                 new SysIdRoutine.Mechanism(
                         (voltage) -> {
                             for (int i = 0; i < 4; i++) {
-                                modules[i].runCharacterization(voltage.in(edu.wpi.first.units.Units.Volts));
+                                switch (Constants.moduleSysId) {
+                                    case "drive":
+                                        modules[i]
+                                                .runDriveCharacterization(voltage.in(edu.wpi.first.units.Units.Volts));
+                                        break;
+                                    case "rotation":
+                                        modules[i].runRotationCharacterization(
+                                                voltage.in(edu.wpi.first.units.Units.Volts));
+                                        break;
+                                }
                             }
                         },
                         null,

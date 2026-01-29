@@ -37,6 +37,8 @@ public class VisionIOPhotonVision implements VisionIO {
 
     private AprilTagFieldLayout aprilTagField;
 
+    private boolean detectsFuel;
+
     public VisionIOPhotonVision(String cameraName, Pose3d cameraPose3d) {
 
         switch (Constants.fieldType) {

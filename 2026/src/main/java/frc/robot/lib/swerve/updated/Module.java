@@ -108,13 +108,26 @@ public class Module {
      * 
      * @param volts Voltage to be sent to the drive motor.
      */
-    public void runCharacterization(double volts) {
+    public void runDriveCharacterization(double volts) {
         // Closed loop control of module rotation
         io.setTurnVoltage(
             turnFeedback.calculate(getAngle().getRadians(), 0.0));
 
         // Open loop control of module drive
         io.setDriveVoltage(volts);
+    }
+
+    /**
+     * Sends a voltage value to the turn motor of a module while maintaining closed loop control with an velocity setpoint of 0.0 on the drive motor.
+     * 
+     * @param volts Voltage to be sent to the turn motor.
+     */
+    public void runRotationCharacterization(double volts) {
+        // Open loop control of the module rotation
+        io.setTurnVoltage(volts);
+
+        // Closed loop control of the module drive
+        io.setDriveVoltage(driveFeedback.calculate(getVelocityMetersPerSec(), 0.0));
     }
 
     /** Disables all outputs to motors. */

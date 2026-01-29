@@ -4,6 +4,10 @@
 
 package frc.robot.current;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
@@ -11,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.current.Constants.OperatorConstants;
 import frc.robot.current.subsystems.ExamplePivot;
 import frc.robot.current.subsystems.Intake;
@@ -48,6 +53,9 @@ public class RobotContainer {
   private final CommandXboxController driveXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   //private final CommandXboxController controlXbox = new CommandXboxController(OperatorConstants.kOtherControllerPort);
 
+  private final LoggedDashboardChooser<Command> autoChooser;
+  private final Command autoDefault = Commands.print("Default auto selected. No autonomous command configured.");
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -61,15 +69,15 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive(
         29.75,
         14.75,
-        new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
-        new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
+        new PIDConfig(0.03, 0.0, 0.0, 0.18868, 0.12825),
+        new PIDConfig(.07, 0.0, 0.0, 0.0, 0.0),
         new GyroIONavX2() {
         }, "SparkFlex",
         ModuleType.SDSMK5iR3,
-        new ModuleConfig(1, 2, 9, 0.0),
-        new ModuleConfig(3, 4, 10, 0.0),
-        new ModuleConfig(5, 6, 11, 0.0),
-        new ModuleConfig(7, 8, 12, 0));
+        new ModuleConfig(1, 2, 9, -99),
+        new ModuleConfig(3, 4, 10, 5.0),
+        new ModuleConfig(5, 6, 11, 29),
+        new ModuleConfig(7, 8, 12, 42));
 
         vision = new Vision(
           // Left Module
@@ -97,9 +105,21 @@ public class RobotContainer {
               new Rotation3d(5, 0, 175))
           ));
     
-
     //vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
     
+    
+    autoChooser = new LoggedDashboardChooser<>("Auto Chooser", AutoBuilder.buildAutoChooser());
+
+    // Add autonomous routines to the SendableChooser
+    autoChooser.addDefaultOption("Default Auto", autoDefault);
+
+    if (Constants.isTuningMode) {
+      autoChooser.addOption("Drive SysId (Dynamic Forward)", swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption("Drive SysId (Dynamic Reverse)", swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+      autoChooser.addOption("Drive SysId (Quasistatic Forward)", swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption("Drive SysId (Quasistatic Reverse)", swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+
+    }
     // Configure the trigger bindings
     configureBindings();
   }
