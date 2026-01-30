@@ -208,11 +208,18 @@ public class SwerveDrive extends SubsystemBase {
                                     setpoint.vxMetersPerSecond * 0.02,
                                     setpoint.vyMetersPerSecond * 0.02,
                                     new Rotation2d(setpoint.omegaRadiansPerSecond * 0.02)));
+            // What is the purpose of multiplying by 0.02 and then dividing by 0.02 again? It seems
+            // redundant.
             var adjustedSpeeds = new ChassisSpeeds(
                     setpointTwist.dx / 0.02,
                     setpointTwist.dy / 0.02,
                     setpointTwist.dtheta / 0.02);
+
+            // Given the desired speeds for the chassis in the next 20ms, calculate the desired
+            // states for each swerve module (this includes wheel speeds and angles)
             SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(adjustedSpeeds);
+
+            // Normalize wheel speeds if any is above the max
             SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, maxLinearSpeed);
 
             // Logging setpoint for debugging
@@ -229,9 +236,10 @@ public class SwerveDrive extends SubsystemBase {
                     setpointStates[i] = new SwerveModuleState(0.0, lastSetpointStates[i].angle);
                 }
             }
+            // Update last setpoints for next iteration
             lastSetpointStates = setpointStates;
 
-            // Send setpoints to modules
+            // Send setpoints to modules to make the chassis move at the desired velocity for this iteration
             SwerveModuleState[] optimizedStates = new SwerveModuleState[4];
             for (int i = 0; i < 4; i++) {
                 optimizedStates[i] = modules[i].runSetpoint(setpointStates[i]);
@@ -242,34 +250,36 @@ public class SwerveDrive extends SubsystemBase {
             Logger.recordOutput("SwerveStates/SetpointsOptimized", optimizedStates);
         }
 
-        // Log measured states
-        /*
-         * SwerveModuleState[] measuredStates = new SwerveModuleState[4];
-         * for (int i = 0; i < 4; i++) {
-         * measuredStates[i] = modules[i].getState();
-         * }
-         */
+        // Get the current state of each module and add to log.
         SwerveModuleState[] measuredStates = getModuleStates();
         Logger.recordOutput("SwerveStates/Measured", measuredStates);
 
         // Update odometry
         SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
+
+        // Calculate change in position for each module since last update
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition(
                     (modules[i].getPositionMeters() - lastModulePositionMeters[i]),
                     modules[i].getAngle());
             lastModulePositionMeters[i] = modules[i].getPositionMeters();
         }
+        // Determine how the chassis has moved based on the wheel deltas
         var twist = kinematics.toTwist2d(wheelDeltas);
+
+        // Use gyro to correct heading change if it is connected
         var gyroYaw = new Rotation2d(gyroInputs.yawPositionRad);
         if (gyroInputs.connected) {
             twist = new Twist2d(twist.dx, twist.dy, gyroYaw.minus(lastGyroYaw).getRadians());
         }
         lastGyroYaw = gyroYaw;
+
+        // Contribute to the new estimated pose based on how the chassis moved (twist) during this iteration
         poseEstimator.addDriveData(Timer.getFPGATimestamp(), twist);
         Logger.recordOutput("Odometry/Robot", getPose());
 
-        // Log 3D odometry pose
+        // Create a 3D Pose from the 2D pose, by adding the gyro's pitch and roll.
+        // Not used for odometry, just for logging.
         Pose3d robotPose3d = new Pose3d(getPose());
         robotPose3d = robotPose3d
                 .exp(

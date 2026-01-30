@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,8 +28,6 @@ public class DriveWithController extends Command {
     private final Supplier<Boolean> robotRelativeOverride;
     // private ChassisSpeeds lastSpeeds = new ChassisSpeeds();
 
-    private final PIDController headingPIDController = new PIDController(5.0, 0, 0, 0.02);
-    private Rotation2d lastHeading = new Rotation2d();
     private boolean isRunHeadingPID = false;
 
     public DriveWithController(
@@ -100,11 +97,19 @@ public class DriveWithController extends Command {
                 .getTranslation();
         
         // Convert to meters per second
-        ChassisSpeeds speeds =
-            new ChassisSpeeds(
+        ChassisSpeeds speeds;
+        
+        if (!isRunHeadingPID) {
+            speeds = new ChassisSpeeds(
                 linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                 linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                 rightX * drive.getMaxAngularSpeedRadPerSec());
+        } else {
+            speeds = new ChassisSpeeds(
+                linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                getRoationNeededToPointToHub(drive.getMaxAngularSpeedRadPerSec()));
+                        }
 
         // Convert from field relative
         if (!robotRelativeOverride.get()) {
@@ -127,7 +132,7 @@ public class DriveWithController extends Command {
         // PID loop to correct straight movemnt
         // Check if no joystick input for rotation
         if (rightX == 0.0 && Math.abs(linearMagnitude) > 0.10 ) {
-           /* // Store values and enable further logic
+            /* // Store values and enable further logic
             if (!isRunHeadingPID) {
                 isRunHeadingPID = true; // Set the enable boolean to true
                 lastHeading = drive.getRotation(); // Store last heading
@@ -158,7 +163,34 @@ public class DriveWithController extends Command {
         // Send to drive
         drive.runVelocity(speeds);
     }
+                
+    private double getRoationNeededToPointToHub(double maxAngularSpeedRadPerSec) {
+        // Get robot pose and hub position
+        Pose2d robotPose = drive.getPose();
+        
+        // Assume hub is at (0,0) for now - make constant outside this metnod/class. Also consider Blue vs Red alliance
+        Translation2d hubPosition = new Translation2d(0.0, 0.0);
 
+
+        // Calculate angle to hub from robot position
+        Translation2d toHub = hubPosition.minus(robotPose.getTranslation());
+        double angleToHub = Math.atan2(toHub.getY(), toHub.getX());
+
+        // Calculate angle difference between robot heading and angle to hub
+        double angleDifference = angleToHub - robotPose.getRotation().getRadians();
+        angleDifference = MathUtil.angleModulus(angleDifference); // Normalize to [-pi, pi]
+
+        // Calculate rotation speed needed - simple P controller move kP into a constant or passed in
+        double kP = 50.0; // Proportional gain, adjust as necessary
+        double rotationSpeed = kP * angleDifference;
+
+        // Clamp to max angular speed of robot
+        rotationSpeed = MathUtil.clamp(rotationSpeed, -maxAngularSpeedRadPerSec, maxAngularSpeedRadPerSec);
+
+        return rotationSpeed;
+        
+    }
+    
     @Override
     public void end(boolean interrupted) {
         drive.stop();
