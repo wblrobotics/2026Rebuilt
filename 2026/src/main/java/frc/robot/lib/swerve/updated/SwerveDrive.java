@@ -41,7 +41,6 @@ public class SwerveDrive extends SubsystemBase {
 
     private String motorController;
 
-
     public static final double coastThresholdMetersPerSec = 0.05; // Need to be under this to switch to coast while
                                                                   // disabling
     public static final double coastThresholdSecs = 6.0; // Need to be under the above speed for this length of time to
@@ -77,20 +76,24 @@ public class SwerveDrive extends SubsystemBase {
 
     /**
      * 
-     * @param trackWidthX The width from the center of the left wheels to the center of the right wheels in inches
-     * @param trackWidthY The width from the center of the front wheels to the center of the back wheels in inches
-     * @param drivePID The PID constants for linear motion
-     * @param turnPID The PID constants for angular motion
-     * @param gyroIO What IO you'd like to use for the gyroscope
-     * @param motorController A string for the type of motor controller used "Spark Flex", "Spark Max", etc
-     * @param moduleType The model of module you are using. 
-     * @param flConfig The config you would like to use for this module
-     * @param frConfig The config you would like to use for this module
-     * @param blConfig The config you would like to use for this module
-     * @param brConfig The config you would like to use for this module
+     * @param trackWidthX     The width from the center of the left wheels to the
+     *                        center of the right wheels in inches
+     * @param trackWidthY     The width from the center of the front wheels to the
+     *                        center of the back wheels in inches
+     * @param drivePID        The PID constants for linear motion
+     * @param turnPID         The PID constants for angular motion
+     * @param gyroIO          What IO you'd like to use for the gyroscope
+     * @param motorController A string for the type of motor controller used "Spark
+     *                        Flex", "Spark Max", etc
+     * @param moduleType      The model of module you are using.
+     * @param flConfig        The config you would like to use for this module
+     * @param frConfig        The config you would like to use for this module
+     * @param blConfig        The config you would like to use for this module
+     * @param brConfig        The config you would like to use for this module
      */
-    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO, String motorController, ModuleType moduleType,
-                        ModuleConfig flConfig, ModuleConfig frConfig, ModuleConfig blConfig, ModuleConfig brConfig) {
+    public SwerveDrive(double trackWidthX, double trackWidthY, PIDConfig drivePID, PIDConfig turnPID, GyroIO gyroIO,
+            String motorController, ModuleType moduleType,
+            ModuleConfig flConfig, ModuleConfig frConfig, ModuleConfig blConfig, ModuleConfig brConfig) {
 
         System.out.println("[Init] Creating SwerveDrive");
 
@@ -99,9 +102,11 @@ public class SwerveDrive extends SubsystemBase {
 
         kinematics = new SwerveDriveKinematics(getModuleTranslations());
 
-        this.maxLinearSpeed = Units.feetToMeters(moduleType.maxSpeed()); 
+        this.maxLinearSpeed = Units.feetToMeters(moduleType.maxSpeed());
         this.maxAngularSpeed = Math.PI;
-        // this.maxAngularSpeed = maxLinearSpeed / Arrays.stream(getModuleTranslations()).map(translation -> translation.getNorm())
+        // this.maxAngularSpeed = maxLinearSpeed /
+        // Arrays.stream(getModuleTranslations()).map(translation ->
+        // translation.getNorm())
         // .max(Double::compare).get();
         this.gyroIO = gyroIO;
         this.motorController = motorController;
@@ -115,15 +120,15 @@ public class SwerveDrive extends SubsystemBase {
 
         switch (this.motorController) {
             case "SparkFlex":
-            modules[0] = new Module(new ModuleIOSparkFlex(0, moduleType, flConfig), 0, drivePID, turnPID);
-            modules[1] = new Module(new ModuleIOSparkFlex(1, moduleType, frConfig), 1, drivePID, turnPID);
-            modules[2] = new Module(new ModuleIOSparkFlex(2, moduleType, blConfig), 2, drivePID, turnPID);
-            modules[3] = new Module(new ModuleIOSparkFlex(3, moduleType, brConfig), 3, drivePID, turnPID);
+                modules[0] = new Module(new ModuleIOSparkFlex(0, moduleType, flConfig), 0, drivePID, turnPID);
+                modules[1] = new Module(new ModuleIOSparkFlex(1, moduleType, frConfig), 1, drivePID, turnPID);
+                modules[2] = new Module(new ModuleIOSparkFlex(2, moduleType, blConfig), 2, drivePID, turnPID);
+                modules[3] = new Module(new ModuleIOSparkFlex(3, moduleType, brConfig), 3, drivePID, turnPID);
             case "SparkMax":
-            modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
-            modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
-            modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
-            modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
+                modules[0] = new Module(new ModuleIOSparkMax(0, moduleType, flConfig), 0, drivePID, turnPID);
+                modules[1] = new Module(new ModuleIOSparkMax(1, moduleType, frConfig), 1, drivePID, turnPID);
+                modules[2] = new Module(new ModuleIOSparkMax(2, moduleType, blConfig), 2, drivePID, turnPID);
+                modules[3] = new Module(new ModuleIOSparkMax(3, moduleType, brConfig), 3, drivePID, turnPID);
         }
 
         lastMovementTimer.start();
@@ -453,9 +458,16 @@ public class SwerveDrive extends SubsystemBase {
                 new Translation2d(-TrackWidthX / 2.0, -TrackWidthY / 2.0)
         };
     }
-    
+
+    /**
+     * Returns the {@link edu.wpi.first.math.geometry.Transform2d} of the bot vs a
+     * target position. You can take the distance, X or Y distance, and rotation.
+     * 
+     * @param target The Pose2d of the position you want to calculate the difference
+     *               from.
+     */
     public Transform2d targetOffset(Pose2d target) {
-        
+
         return this.getPose().minus(target);
     }
 }
