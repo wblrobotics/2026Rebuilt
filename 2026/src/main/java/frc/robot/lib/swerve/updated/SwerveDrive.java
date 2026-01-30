@@ -138,6 +138,7 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         // Configure SysId
+        System.out.println("[DEBUG] creating sysId varible");
         sysId = new SysIdRoutine(
                 new SysIdRoutine.Config(
                         null,
@@ -146,9 +147,11 @@ public class SwerveDrive extends SubsystemBase {
                         (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
                 new SysIdRoutine.Mechanism(
                         (voltage) -> {
-                            for (int i = 0; i < 4; i++) {
-                                modules[i].runCharacterization(voltage.in(edu.wpi.first.units.Units.Volts), Constants.moduleSysId);
-                            }
+                            // for (int i = 0; i < 4; i++) {
+                            //     modules[i].runCharacterization(voltage.in(edu.wpi.first.units.Units.Volts), Constants.moduleSysId);
+                            // }
+                            System.out.println("[DEBUG] running characterization");
+                            modules[0].runCharacterization(voltage.in(edu.wpi.first.units.Units.Volts), Constants.moduleSysId);
                         },
                         null,
                         this));
@@ -383,6 +386,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return A sysId dynamic command.
      */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        System.out.println("[DEBUG] sysIdDynamic");
         return sysId.dynamic(direction);
     }
 

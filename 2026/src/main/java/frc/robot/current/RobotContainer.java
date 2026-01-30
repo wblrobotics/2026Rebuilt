@@ -54,7 +54,7 @@ public class RobotContainer {
   //private final CommandXboxController controlXbox = new CommandXboxController(OperatorConstants.kOtherControllerPort);
 
   private final LoggedDashboardChooser<Command> autoChooser;
-  private final Command autoDefault = Commands.print("Default auto selected. No autonomous command configured.");
+  private Command autoDefault = Commands.print("Default auto selected. No autonomous command configured.");
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -79,7 +79,7 @@ public class RobotContainer {
         new ModuleConfig(5, 6, 11, 29),
         new ModuleConfig(7, 8, 12, 42));
 
-        vision = new Vision(
+       /* vision = new Vision(
           // Left Module
           new VisionIOPhotonVision("Camera 2", 
             new Pose3d(
@@ -105,12 +105,13 @@ public class RobotContainer {
               new Rotation3d(5, 0, 175))
           ));
     
-    //vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
-    
+    vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
+    */
     
     autoChooser = new LoggedDashboardChooser<>("Auto Chooser", AutoBuilder.buildAutoChooser());
 
     // Add autonomous routines to the SendableChooser
+    autoDefault = swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward);
     autoChooser.addDefaultOption("Default Auto", autoDefault);
 
     if (Constants.isTuningMode) {

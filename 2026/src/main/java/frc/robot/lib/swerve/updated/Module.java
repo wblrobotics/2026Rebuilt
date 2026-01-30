@@ -111,8 +111,10 @@ public class Module {
      * @param volts Voltage to be sent to the drive motor.
      */
     public void runCharacterization(double volts, String sysIDType) {
+        System.out.println("[DEBUG] runCharacterization");
         switch (sysIDType) {
             case "drive":
+                System.out.println("[DEBUG] runCharacterization entered drive");
                 // Closed loop control of module rotation
                 io.setTurnVoltage(
                         turnFeedback.calculate(getAngle().getRadians(), 0.0));
@@ -121,6 +123,7 @@ public class Module {
                 io.setDriveVoltage(volts);
                 break;
             case "rotation":
+                System.out.println("[DEBUG] runCharacterization entered rotation");
                 // Open loop control of the module rotation
                 io.setTurnVoltage(volts);
 
