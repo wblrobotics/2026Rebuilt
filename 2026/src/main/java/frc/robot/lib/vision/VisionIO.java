@@ -16,12 +16,17 @@ import edu.wpi.first.math.numbers.*;
 public interface VisionIO {
     //@AutoLog
     public static class VisionIOInputs {
+        // April Tags
         public int tagCount = 0;
         public Pose3d estimatedPose = new Pose3d();
         public double timestamp = 0.0;
         public Matrix<N3, N1> stdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         
         public Pose2d robotPose = new Pose2d();
+
+        // Object Detection
+        public boolean detectsObj;
+        public double objConfidence;
     }
 
     public void updateInputs(VisionIOInputs inputs);

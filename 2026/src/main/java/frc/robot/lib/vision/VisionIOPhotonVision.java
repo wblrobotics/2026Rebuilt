@@ -10,6 +10,7 @@ import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -37,7 +38,13 @@ public class VisionIOPhotonVision implements VisionIO {
 
     private AprilTagFieldLayout aprilTagField;
 
-    private boolean detectsFuel;
+    private boolean detectsObj = false;
+    private double objConfidence = 0.0;
+    private static final int aprilTagPipelineIndex = 0;
+    private static final int objectDetectionPipelineIndex = 1;
+    private static final double minObjDetectionConfidence = 0.75;
+
+    private String pipelineType;
 
     /**
      * 
@@ -45,7 +52,7 @@ public class VisionIOPhotonVision implements VisionIO {
      * @param cameraPose3d The location of the robot relative to it's center
      */
 
-    public VisionIOPhotonVision(String cameraName, Pose3d cameraPose3d) {
+    public VisionIOPhotonVision(String cameraName, Pose3d cameraPose3d, String cameraPipelineType) {
 
         switch (Constants.fieldType) {
             case "Welded": 
@@ -58,6 +65,13 @@ public class VisionIOPhotonVision implements VisionIO {
 
         System.out.println("[Init] Creating VisionIOPhotonVision Camera: " + cameraName);
         camera = new PhotonCamera(cameraName);
+
+        pipelineType = cameraPipelineType;
+        if (pipelineType.equals("object")) {
+            camera.setPipelineIndex(objectDetectionPipelineIndex);
+        } else {
+            camera.setPipelineIndex(aprilTagPipelineIndex);
+        }
 
         photonEstimator = 
             new PhotonPoseEstimator(aprilTagField, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Pose3d(), cameraPose3d));
@@ -152,8 +166,35 @@ public class VisionIOPhotonVision implements VisionIO {
         return estStdDevs;
     }
 
-    // Simulation code
+    private void updateObjDetection() {
+        PhotonPipelineResult result = camera.getLatestResult();
+
+        double bestTargetConfidence = 0.0;
+        
+        if (result.hasTargets()) {
+            PhotonTrackedTarget bestTarget = result.getBestTarget(); // Get the best target
+            bestTargetConfidence = bestTarget.getDetectedObjectConfidence();
+            if (bestTargetConfidence >= minObjDetectionConfidence) {
+                detectsObj = true;
+            } else {
+                detectsObj = false;
+            }
+        } else {
+            detectsObj = false;
+        }
+
+        objConfidence = bestTargetConfidence;
+    }
+
+    public boolean detectsObj() {
+        return detectsObj;
+    }
     
+    public double getConfidence() {
+        return objConfidence;
+    }
+
+    // Simulation code
     public void simulationPeriodic(Pose2d robotSimPose) {
         visionSim.update(robotSimPose);
     }
@@ -173,18 +214,33 @@ public class VisionIOPhotonVision implements VisionIO {
             visionSim.update(inputs.robotPose);
         }
 
-        inputs.tagCount = getLatestResult().getTargets().size();
-        var poseEst = getEstimatedGlobalPose();
-        poseEst.ifPresentOrElse(
-            est -> {
-                inputs.estimatedPose = est.estimatedPose;
-                inputs.stdDevs = getEstimationStdDevs(est.estimatedPose);
-                //inputs.timestamp = Units.secondsToMilliseconds(est.timestampSeconds);
-                inputs.timestamp = est.timestampSeconds;
-            },
-            () -> {
-                inputs.estimatedPose = null;
-                inputs.stdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            });
+        if (pipelineType.equals("object")) {
+            if (camera.getPipelineIndex() != objectDetectionPipelineIndex) {
+                camera.setPipelineIndex(objectDetectionPipelineIndex);
+            }
+
+            updateObjDetection();
+
+            inputs.detectsObj = detectsObj;
+            inputs.objConfidence = objConfidence;
+        } else {
+            if (camera.getPipelineIndex() != aprilTagPipelineIndex) {
+                camera.setPipelineIndex(aprilTagPipelineIndex);
+            }
+
+            inputs.tagCount = getLatestResult().getTargets().size();
+            var poseEst = getEstimatedGlobalPose();
+            poseEst.ifPresentOrElse(
+                est -> {
+                    inputs.estimatedPose = est.estimatedPose;
+                    inputs.stdDevs = getEstimationStdDevs(est.estimatedPose);
+                    //inputs.timestamp = Units.secondsToMilliseconds(est.timestampSeconds);
+                    inputs.timestamp = est.timestampSeconds;
+                },
+                () -> {
+                    inputs.estimatedPose = null;
+                    inputs.stdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                });
+        }
     }
 }
