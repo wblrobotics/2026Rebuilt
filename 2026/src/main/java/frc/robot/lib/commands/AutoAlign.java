@@ -18,7 +18,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.current.FieldConstants;
-import frc.robot.lib.swerve.updated.SwerveDrive;
+import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.util.AllianceFlipUtil;
 
 public class AutoAlign extends DriveToPose {
@@ -48,7 +48,7 @@ public class AutoAlign extends DriveToPose {
                 CENTER
         }
 
-        public AutoAlign(SwerveDrive drive, Supplier<Target> target, Supplier<Direction> direction) {
+        public AutoAlign(Drive drive, Supplier<Target> target, Supplier<Direction> direction) {
                 super(
                         drive,
                          false,
@@ -69,7 +69,6 @@ public class AutoAlign extends DriveToPose {
 
                                         System.out.print(direction.get());
                                         System.out.print("before flip");
-                                        System.out.println(nearestTarget.getRotation());
 
                                         // Dont slam into reef
                                         Pose2d allianceFlippedDrive = AllianceFlipUtil.apply(drive.getPose());
@@ -162,7 +161,7 @@ public class AutoAlign extends DriveToPose {
          * @param direction The direction you want the bot to be offseted towards. LEFT, RIGHT, or CENTER
          * @return The new pose that {@link AutoAlign#AutoAlign} will go to. 
          */
-        public static Pose2d offSetReef(SwerveDrive drive, Pose2d originalPose, Direction direction) {
+        public static Pose2d offSetReef(Drive drive, Pose2d originalPose, Direction direction) {
                 Pose2d updatedPose;
 
                 switch (direction) {

@@ -14,11 +14,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.current.Constants;
-import frc.robot.lib.swerve.updated.SwerveDrive;
+import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.util.GeomUtil;
 
 public class DriveToPose extends Command {
-    private final SwerveDrive drive;
+    private final Drive drive;
     private final boolean slowMode;
     private final Supplier<Pose2d> poseSupplier;
 
@@ -73,11 +73,11 @@ public class DriveToPose extends Command {
         }
     }
 
-    public DriveToPose(SwerveDrive drive, boolean slowMode, Pose2d pose) {
+    public DriveToPose(Drive drive, boolean slowMode, Pose2d pose) {
         this(drive, slowMode, () -> pose);
     }
 
-    public DriveToPose(SwerveDrive drive, boolean slowMode, Supplier<Pose2d> poseSupplier) {
+    public DriveToPose(Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier) {
         this.drive = drive;
         this.slowMode = slowMode;
         this.poseSupplier = poseSupplier;
@@ -93,10 +93,10 @@ public class DriveToPose extends Command {
             currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
             Math.min(
                 0.0,
-                -new Translation2d(drive.getFieldVelocity().dx, drive.getFieldVelocity().dy)
+                -new Translation2d(drive.getFieldVelocity().vxMetersPerSecond, drive.getFieldVelocity().vyMetersPerSecond)
                     .rotateBy(poseSupplier.get().getTranslation().minus(drive.getPose().getTranslation()).getAngle().unaryMinus())
                     .getX()));
-        thetaController.reset(currentPose.getRotation().getRadians(), drive.getYawVelocity());
+        thetaController.reset(currentPose.getRotation().getRadians(), drive.getFieldVelocity().omegaRadiansPerSecond);
         lastSetpointTranslation = drive.getPose().getTranslation();
     }
 
