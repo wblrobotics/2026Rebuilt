@@ -115,6 +115,9 @@ public class RobotContainer {
           drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
       autoChooser.addOption("Drive SysId (Quasistatic Reverse)",
           drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      autoChooser.addOption("FFCharacterization", DriveCommands.feedforwardCharacterization(drive));
+      autoChooser.addOption(
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
 
     }
     // Configure the trigger bindings
@@ -192,7 +195,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    return autoChooser.get();
     // An example command will be run in autonomous
-    return null;
+    //return null;
   }
 }

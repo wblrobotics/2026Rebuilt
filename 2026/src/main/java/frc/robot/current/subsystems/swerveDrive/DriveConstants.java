@@ -58,7 +58,7 @@ public class DriveConstants {
 
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 50;
-  public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
+  public static final double wheelRadiusMeters = 0.038;
   public static final double driveMotorReduction = (5.27); // Mk5i R3 gearing
   public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
 
@@ -73,8 +73,8 @@ public class DriveConstants {
   // Drive PID configuration
   public static final double driveKp = 0.0;
   public static final double driveKd = 0.0;
-  public static final double driveKs = 0.0;
-  public static final double driveKv = 0.1;
+  public static final double driveKs = 0.09903;
+  public static final double driveKv = 0.08621;
   public static final double driveSimP = 0.05;
   public static final double driveSimD = 0.0;
   public static final double driveSimKs = 0.0;

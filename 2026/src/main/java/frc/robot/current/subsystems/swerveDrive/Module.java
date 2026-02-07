@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import frc.robot.lib.swerve.newnew.ModuleIOInputsAutoLogged;
+import frc.robot.current.subsystems.swerveDrive.ModuleIOInputsAutoLogged;
 
 import static frc.robot.current.subsystems.swerveDrive.DriveConstants.*;
 
