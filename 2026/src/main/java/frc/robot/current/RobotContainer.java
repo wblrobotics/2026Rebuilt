@@ -26,6 +26,7 @@ import frc.robot.current.subsystems.swerveDrive.ModuleIOSpark;
 import frc.robot.lib.commands.DriveCommands;
 import frc.robot.lib.vision.VisionIOPhotonVision;
 import frc.robot.lib.vision.Vision;
+import static frc.robot.lib.vision.VisionConstants.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -72,35 +73,13 @@ public class RobotContainer {
         new ModuleIOSpark(2),
         new ModuleIOSpark(3));
 
-    /*
-     * vision = new Vision(
-     * // Left Module
-     * new VisionIOPhotonVision("Camera 2",
-     * new Pose3d(
-     * Units.inchesToMeters(7.375),
-     * Units.inchesToMeters(10.875),
-     * Units.inchesToMeters(12),
-     * new Rotation3d(0, Units.degreesToRadians(-11), Units.degreesToRadians(-11)))
-     * ),
-     * // Right Module
-     * new VisionIOPhotonVision("Camera 3",
-     * new Pose3d(
-     * Units.inchesToMeters(7.375),
-     * Units.inchesToMeters(-10.875),
-     * Units.inchesToMeters(11.5),
-     * new Rotation3d(0, Units.degreesToRadians(11), Units.degreesToRadians(11)))
-     * ),
-     * // Backup Cam
-     * new VisionIOPhotonVision("Camera 4",
-     * new Pose3d(
-     * Units.inchesToMeters(-0.5),
-     * Units.inchesToMeters(-5),
-     * Units.inchesToMeters(37.5),
-     * new Rotation3d(5, 0, 175))
-     * ));
-     * 
-     * vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
-     */
+    vision = new Vision(drive::addVisionMeasurement,
+        new VisionIOPhotonVision(camera0Name, robotToCamera0),
+        new VisionIOPhotonVision(camera1Name, robotToCamera1),
+        new VisionIOPhotonVision(camera2Name, robotToCamera2),
+        new VisionIOPhotonVision(camera3Name, robotToCamera3)
+        ); 
+    
 
     autoChooser = new LoggedDashboardChooser<>("Auto Chooser", AutoBuilder.buildAutoChooser());
 
