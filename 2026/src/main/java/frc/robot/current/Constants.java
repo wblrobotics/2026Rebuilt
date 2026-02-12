@@ -4,6 +4,8 @@
 
 package frc.robot.current;
 
+import edu.wpi.first.wpilibj.RobotBase;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,7 +17,34 @@ package frc.robot.current;
 public final class Constants {
   public static final String robot = "Real";
   public static final String fieldType = "welded";
-  
+
+  public static final boolean isTuningMode = true;
+
+  /**
+   * This is how the SysID knows which motor on the module to test.See the example command to run a sysId test,
+   * and see how the String is used to determine the SysID test
+   * 
+   * @see
+   * {@link frc.robot.lib.swerve.updated.SwerveDrive}
+   * {@link frc.robot.lib.swerve.updated.SwerveDrive#sysIdQuasistatic(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction)}
+   * {@link frc.robot.lib.swerve.updated.Module#runCharacterization()
+   */
+  public final static String moduleSysId = "rotation"; // Either rotation or drive
+
+  public static final Mode simMode = Mode.SIM;
+  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+  public static enum Mode {
+    /** Running on a real robot. */
+    REAL,
+
+    /** Running a physics simulator. */
+    SIM,
+
+    /** Replaying from a log file. */
+    REPLAY
+  }
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOtherControllerPort = 1;
