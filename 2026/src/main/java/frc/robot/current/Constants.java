@@ -64,8 +64,12 @@ public final class Constants {
     public static final int motorTwoId = 21;
     public static final int motorThreeId = 22;
 
+    public static final double kP = 0.00006;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0003;
     public static final double kS = 0.0;
-    public static final double kV = 0.0;
+    public static final double kV = 0.00181;
+    public static final double kA = 0.0;
   }
 
 }

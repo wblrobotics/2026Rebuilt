@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.current.Constants;
+import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.motors.motorController.MotorController;
 import frc.robot.lib.motors.motorController.MotorIOSparkMax;
-import frc.robot.lib.swerve.updated.SwerveDrive;
-
 
 
 public class Intake extends SubsystemBase {
@@ -20,7 +19,7 @@ public class Intake extends SubsystemBase {
 
   private final int rightMotorID = Constants.IntakeConstants.motorID;
   
-  public Intake(String robotType, SwerveDrive drive) {
+  public Intake(String robotType, Drive drive) {
     // TODO: change table and entry keys
     // table = NetworkTableInstance.getDefault().getTable("default");
     // visionTarget = table.getEntry("default");

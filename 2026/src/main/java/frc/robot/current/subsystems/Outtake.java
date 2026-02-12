@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.current.Constants;
 import frc.robot.current.FieldConstants;
+import frc.robot.current.Constants.OuttakeConstants;
+import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.motors.velocityController.VelocityController;
 import frc.robot.lib.motors.velocityController.VelocityIOSparkMax;
 
@@ -30,9 +32,14 @@ public class Outtake extends SubsystemBase {
         SparkMaxConfig config = new SparkMaxConfig();
         config.inverted(true);
         config.smartCurrentLimit(30);
-        config.closedLoop.feedForward // Set Feedforward gains for the velocity controller
-                .kS(Constants.OuttakeConstants.kS)
-                .kV(Constants.OuttakeConstants.kV);
+        config.closedLoop
+                .p(OuttakeConstants.kP)
+                .i(OuttakeConstants.kI)
+                .d(OuttakeConstants.kD)
+            .feedForward // Set Feedforward gains for the velocity controller
+                .kS(OuttakeConstants.kS) // Static gain (volts)
+                .kV(OuttakeConstants.kV) // Velocity gain (volts per RPM)
+                .kA(OuttakeConstants.kA); // Acceleration gain (volts per RPM/s)
 
         switch (robotType) {
             case "Real":
@@ -74,8 +81,8 @@ public class Outtake extends SubsystemBase {
     }
 
     public Command quickLaunch() {
-        double motorOneSpeed = 1000;
-        double motorTwoSpeed = 1000;
+        double motorOneSpeed = 2000;
+        double motorTwoSpeed = 2000;
 
         return Commands.sequence(
                 runOnce(() -> {
@@ -88,7 +95,8 @@ public class Outtake extends SubsystemBase {
                 }));
     }
 
-    // Runs the launcher at variable RPM in relation to distance from the hub. Motors stop when the hopper is empty
+    // Runs the launcher at variable RPM in relation to distance from the hub.
+    // Motors stop when the hopper is empty
     public Command fullLaunch() {
         return Commands.sequence(
                 run(() -> {
