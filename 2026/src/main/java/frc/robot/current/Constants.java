@@ -72,4 +72,9 @@ public final class Constants {
     public static final double kA = 0.0;
   }
 
+  public static class ClimberConstants{
+    public static final int leftClimbMotorID = 1000;
+    public static final int rightClimbMotorID = 1001;
+  }
+
 }
