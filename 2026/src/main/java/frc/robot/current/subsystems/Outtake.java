@@ -10,7 +10,6 @@ import frc.robot.current.Constants;
 import frc.robot.current.FieldConstants;
 import frc.robot.lib.motors.velocityController.VelocityController;
 import frc.robot.lib.motors.velocityController.VelocityIOSparkMax;
-import frc.robot.lib.swerve.updated.SwerveDrive;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
@@ -18,7 +17,7 @@ public class Outtake extends SubsystemBase {
     private VelocityController motorOne;
     private VelocityController motorTwo;
 
-    private SwerveDrive swerve;
+    private Drive swerve;
     private Boolean hopperEmpty = false;
 
     private InterpolatingDoubleTreeMap launchMap = new InterpolatingDoubleTreeMap();
@@ -26,7 +25,7 @@ public class Outtake extends SubsystemBase {
     private final int motorOneId = Constants.OuttakeConstants.motorOneId;
     private final int motorTwoId = Constants.OuttakeConstants.motorTwoId;
 
-    public Outtake(String robotType, SwerveDrive drive) {
+    public Outtake(String robotType, Drive drive) {
         this.swerve = drive;
         SparkMaxConfig config = new SparkMaxConfig();
         config.inverted(true);

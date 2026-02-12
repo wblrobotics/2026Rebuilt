@@ -16,12 +16,6 @@ import frc.robot.current.subsystems.ExamplePivot;
 import frc.robot.current.subsystems.Intake;
 import frc.robot.current.subsystems.LedOperation;
 import frc.robot.current.subsystems.Outtake;
-import frc.robot.lib.commands.DriveWithController;
-import frc.robot.lib.swerve.updated.GyroIONavX2;
-import frc.robot.lib.swerve.updated.ModuleConfig;
-import frc.robot.lib.swerve.updated.ModuleType;
-import frc.robot.lib.swerve.updated.PIDConfig;
-import frc.robot.lib.swerve.updated.SwerveDrive;
 import frc.robot.lib.vision.VisionIOPhotonVision;
 import frc.robot.lib.vision.Vision;
 
@@ -38,7 +32,6 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   private ExamplePivot exPivot;
-  private SwerveDrive swerveDrive;
   private LedOperation leds;
   private Intake intake;
   private Vision vision;
@@ -58,19 +51,7 @@ public class RobotContainer {
     //intake = new Intake(Constants.robot);
     //outtake = new Outtake(Constants.robot);
 
-    swerveDrive = new SwerveDrive(
-        21.5,    // 2026 29.75
-        21.5,    // 2026 14.75
-        new PIDConfig(0.1, 0.0, 0.0, 0.18868, 0.12825),
-        new PIDConfig(4.0, 0.0, 0.0, 0.0, 0.0),
-        new GyroIONavX2() {
-        }, "SparkMax",
-        ModuleType.SDSMK4iL3,
-        new ModuleConfig(2, 1, 9, -62),
-        new ModuleConfig(4, 3, 10, 120),
-        new ModuleConfig(8, 7, 12, -40),
-        new ModuleConfig(6, 5, 11, -15));
-
+    
         vision = new Vision(
           // Left Module
           new VisionIOPhotonVision("Camera 2", 
@@ -98,7 +79,6 @@ public class RobotContainer {
           ));
     
 
-    vision.setDataInterfaces(swerveDrive::addVisionData, swerveDrive::getPose);
     
     // Configure the trigger bindings
     configureBindings();
@@ -133,10 +113,6 @@ public class RobotContainer {
     //controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
     //controlXbox.x().onTrue(outtake.launch());
 
-    swerveDrive.setDefaultCommand(
-        new DriveWithController(swerveDrive, 0.5, 0.5, () -> driveXbox.getLeftX(), () -> driveXbox.getLeftY(),
-            () -> driveXbox.getRightX(), () -> driveXbox.getRightY(), () -> driveXbox.a().getAsBoolean()));
-    driveXbox.x().onTrue(Commands.runOnce(swerveDrive::stopWithX, swerveDrive));
   }
 
   /**
