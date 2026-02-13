@@ -1,5 +1,6 @@
 package frc.robot.current.subsystems;
 
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -15,9 +16,8 @@ import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.motors.motorController.MotorController;
 import frc.robot.lib.motors.motorController.MotorIOSparkFlex;
 import frc.robot.lib.motors.motorController.MotorIOSparkMax;
-import frc.robot.lib.motors.positionController.PIDConfig;
 import frc.robot.lib.motors.positionController.PositionController;
-import frc.robot.lib.motors.positionController.PositionIOSparkMax;
+import frc.robot.lib.motors.positionController.PositionIOSparkFlex;
 
 public class Intake extends SubsystemBase {
   private MotorController intakeMotor;
@@ -35,16 +35,23 @@ public class Intake extends SubsystemBase {
     rightConfig.inverted(true);
     rightConfig.smartCurrentLimit(30);
 
-    SparkMaxConfig pivotConfig = new SparkMaxConfig();
+    SparkFlexConfig pivotConfig = new SparkFlexConfig();
     pivotConfig.inverted(false);
     pivotConfig.smartCurrentLimit(30);
+
+    pivotConfig.closedLoop
+            .p(IntakeConstants.kP)
+            .i(IntakeConstants.kI)
+            .d(IntakeConstants.kD)
+        .feedForward // Set Feedforward gains for the velocity controller
+            .kS(IntakeConstants.kS) // Static gain (volts)
+            .kV(IntakeConstants.kV) // Velocity gain (volts per RPM)
+            .kA(IntakeConstants.kA); // Acceleration gain (volts per RPM/s)
 
     switch (robotType) {
       case "Real":
         intakeMotor = new MotorController(new MotorIOSparkFlex(rightMotorID, rightConfig, 35), "Intake", "1");
-        pivotMotor = new PositionController(new PositionIOSparkMax(pivotMotorID, rightConfig, 0.0,
-          new PIDConfig(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, IntakeConstants.kS, IntakeConstants.kV, IntakeConstants.kA)),
-          "Intake");
+        pivotMotor = new PositionController(new PositionIOSparkFlex(pivotMotorID, pivotConfig, 0.0),"Intake");
         break;
       case "SIM":
         // Just don't use sim.
@@ -52,9 +59,7 @@ public class Intake extends SubsystemBase {
         break;
       default:
         intakeMotor = new MotorController(new MotorIOSparkMax(rightMotorID, rightConfig, 30), "Intake", "1");
-        pivotMotor = new PositionController(new PositionIOSparkMax(pivotMotorID, rightConfig, 0.0,
-          new PIDConfig(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, IntakeConstants.kS, IntakeConstants.kV, IntakeConstants.kA)),
-          "Intake");
+        pivotMotor = new PositionController(new PositionIOSparkFlex(pivotMotorID, pivotConfig,0.0), "Intake");
         break;
     }
   }
@@ -88,14 +93,14 @@ public class Intake extends SubsystemBase {
   // TODO: Get proper angle for motor up position
   public Command rotateUp() {
     return Commands.runOnce(() -> {
-        pivotMotor.setMotorPosition(360);
+        pivotMotor.setMotorPosition(90);
     });
   }
 
   // TODO: Get proper angle for motor down position
   public Command rotateDown() {
     return Commands.runOnce(() -> {
-        pivotMotor.setMotorPosition(360);
+        pivotMotor.setMotorPosition(0);
     });
   }
 

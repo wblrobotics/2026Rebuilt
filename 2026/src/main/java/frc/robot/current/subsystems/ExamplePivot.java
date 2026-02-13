@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.current.Constants;
-import frc.robot.lib.motors.positionController.PIDConfig;
+import frc.robot.current.Constants.IntakeConstants;
 import frc.robot.lib.motors.positionController.PositionController;
 import frc.robot.lib.motors.positionController.PositionIOSim;
 import frc.robot.lib.motors.positionController.PositionIOSparkMax;
@@ -37,14 +37,22 @@ public class ExamplePivot extends SubsystemBase{
         motorConfig.smartCurrentLimit(40);
 
         motorConfig.idleMode(IdleMode.kBrake);
+
+        motorConfig.closedLoop
+            .p(IntakeConstants.kP)
+            .i(IntakeConstants.kI)
+            .d(IntakeConstants.kD)
+        .feedForward // Set Feedforward gains for the velocity controller
+            .kS(IntakeConstants.kS) // Static gain (volts)
+            .kV(IntakeConstants.kV) // Velocity gain (volts per RPM)
+            .kA(IntakeConstants.kA); // Acceleration gain (volts per RPM/s)
+
         motorConstraints = new TrapezoidProfile.Constraints(60, 30);
         motorPIDController = new ProfiledPIDController(1, 0, 0, motorConstraints);
 
-        //TODO: Get real PID, constraints, and motor feedforward stuff;
         switch (robotType) {
             case "Real":
-                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 5,
-                new PIDConfig(0.0, 0.0, 0.0, 0, 0.0, 0.0)), "Algae");
+                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig,0), "Pivot");
 
                 break;
             case "Sim":
@@ -52,8 +60,7 @@ public class ExamplePivot extends SubsystemBase{
 
                 break;
             default:
-                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 5,
-                new PIDConfig(0.0, 0.0, 0.0, 0, 0.0, 0.0)), "Algae");
+                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 0), "Pivot");
 
                 break;
         }

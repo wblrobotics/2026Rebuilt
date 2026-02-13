@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.MathUtil;
 
@@ -20,20 +20,12 @@ public class PositionIOSparkFlex implements PositionControllerIO{
     private final SparkAbsoluteEncoder motorEncoder;
     private SparkClosedLoopController pidController;
 
-    public PositionIOSparkFlex(int deviceId, SparkMaxConfig motorConfig, double pivotOffset, PIDConfig pidConfig) {
+    public PositionIOSparkFlex(int deviceId, SparkFlexConfig motorConfig, double pivotOffset) {
         this.pivotOffset = pivotOffset;
         motor = new SparkFlex(deviceId, MotorType.kBrushless);
 
         motorEncoder = motor.getAbsoluteEncoder();
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        motorConfig.closedLoop
-            .p(pidConfig.getkP())
-            .i(pidConfig.getkI())
-            .d(pidConfig.getkD())
-        .feedForward // Set Feedforward gains for the velocity controller
-            .kS(pidConfig.getkS()) // Static gain (volts)
-            .kV(pidConfig.getkV()) // Velocity gain (volts per RPM)
-            .kA(pidConfig.getkA()); // Acceleration gain (volts per RPM/s)
 
         pidController = motor.getClosedLoopController();
     }
