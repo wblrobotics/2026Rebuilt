@@ -1,6 +1,6 @@
 package frc.robot.current.subsystems;
 
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,12 +30,12 @@ public class Outtake extends SubsystemBase {
 
     public Outtake(Drive drive) {
         this.swerve = drive;
-        SparkMaxConfig lowConfig = new SparkMaxConfig();
-        SparkMaxConfig highConfig = new SparkMaxConfig();
+        SparkFlexConfig lowConfig = new SparkFlexConfig();
+        SparkFlexConfig highConfig = new SparkFlexConfig();
         lowConfig.inverted(false);
         highConfig.inverted(true);
-        lowConfig.smartCurrentLimit(30);
-        highConfig.smartCurrentLimit(30);
+        lowConfig.smartCurrentLimit(70);
+        highConfig.smartCurrentLimit(70);
         lowConfig.closedLoop
                 .p(OuttakeConstants.kP)
                 .i(OuttakeConstants.kI)
@@ -65,8 +65,8 @@ public class Outtake extends SubsystemBase {
 
                 break;
             default:
-                highMotor = new VelocityController(new VelocityIOSparkMax(highMotorId, highConfig), "Outtake", "1");
-                lowMotor = new VelocityController(new VelocityIOSparkMax(lowMotorId, lowConfig), "Outtake", "2");
+                highMotor = new VelocityController(new VelocityIOSparkFlex(highMotorId, highConfig), "Outtake", "1");
+                lowMotor = new VelocityController(new VelocityIOSparkFlex(lowMotorId, lowConfig), "Outtake", "2");
                 break;
         }
 
