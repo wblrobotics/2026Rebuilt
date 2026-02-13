@@ -55,9 +55,18 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
+    //TODO: Get Motor IDs
     public static final int motorID = 30;
+    public static final int pivotMotorID = 100000;
     public static final double intakeSpeed = 0.5;
 
+    // PID
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
   }
   public static class OuttakeConstants {
     public static final int highMotorId = 20;
