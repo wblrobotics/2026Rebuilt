@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.current.Constants;
+import frc.robot.lib.motors.positionController.PIDConfig;
 import frc.robot.lib.motors.positionController.PositionController;
 import frc.robot.lib.motors.positionController.PositionIOSim;
 import frc.robot.lib.motors.positionController.PositionIOSparkMax;
@@ -42,7 +43,8 @@ public class ExamplePivot extends SubsystemBase{
         //TODO: Get real PID, constraints, and motor feedforward stuff;
         switch (robotType) {
             case "Real":
-                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 5), "Algae");
+                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 5,
+                new PIDConfig(0.0, 0.0, 0.0, 0, 0.0, 0.0)), "Algae");
 
                 break;
             case "Sim":
@@ -50,7 +52,8 @@ public class ExamplePivot extends SubsystemBase{
 
                 break;
             default:
-                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 5), "Algae");
+                motor = new PositionController(new PositionIOSparkMax(motorID, motorConfig, 5,
+                new PIDConfig(0.0, 0.0, 0.0, 0, 0.0, 0.0)), "Algae");
 
                 break;
         }

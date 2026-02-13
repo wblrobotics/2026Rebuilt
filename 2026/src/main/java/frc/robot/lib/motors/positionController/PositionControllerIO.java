@@ -21,4 +21,6 @@ public interface PositionControllerIO {
     public abstract double getEncoder();
 
     public abstract double getVelocity();
+
+    public abstract void setMotorPosition(double rotations);
 }
