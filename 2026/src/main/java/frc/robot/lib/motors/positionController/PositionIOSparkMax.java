@@ -19,20 +19,12 @@ public class PositionIOSparkMax implements PositionControllerIO{
     private final SparkAbsoluteEncoder motorEncoder;
     private SparkClosedLoopController pidController;
 
-    public PositionIOSparkMax(int deviceId, SparkMaxConfig motorConfig, double pivotOffset, PIDConfig pidConfig) {
+    public PositionIOSparkMax(int deviceId, SparkMaxConfig motorConfig, double pivotOffset) {
         this.pivotOffset = pivotOffset;
         motor = new SparkMax(deviceId, MotorType.kBrushless);
 
         motorEncoder = motor.getAbsoluteEncoder();
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        motorConfig.closedLoop
-            .p(pidConfig.getkP())
-            .i(pidConfig.getkI())
-            .d(pidConfig.getkD())
-        .feedForward // Set Feedforward gains for the velocity controller
-            .kS(pidConfig.getkS()) // Static gain (volts)
-            .kV(pidConfig.getkV()) // Velocity gain (volts per RPM)
-            .kA(pidConfig.getkA()); // Acceleration gain (volts per RPM/s)
 
         pidController = motor.getClosedLoopController();
     }
