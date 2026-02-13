@@ -71,16 +71,17 @@ public class Outtake extends SubsystemBase {
         }
 
         // Set the prelearned distances (inches) with respective velocities (RPM)
-        launchMap.put(20.0, 200.0);
-        launchMap.put(40.0, 400.0);
-        launchMap.put(60.0, 600.0);
-        launchMap.put(80.0, 800.0);
-        launchMap.put(100.0, 1000.0);
-        launchMap.put(120.0, 1200.0);
-        launchMap.put(140.0, 1400.0);
-        launchMap.put(160.0, 1600.0);
-        launchMap.put(180.0, 1800.0);
-        launchMap.put(200.0, 2000.0);
+        launchMap.put(20.0, 1800.0);
+        launchMap.put(40.0, 2200.0);
+        launchMap.put(60.0, 2600.0);
+        launchMap.put(76.0, 3000.0);
+        launchMap.put(80.0, 3100.0);
+        launchMap.put(100.0, 3200.0);
+        launchMap.put(120.0, 3300.0);
+        launchMap.put(140.0, 3400.0);
+        launchMap.put(160.0, 3500.0);
+        launchMap.put(180.0, 3600.0);
+        launchMap.put(200.0, 3700.0);
     }
 
     public void periodic() {
@@ -109,7 +110,7 @@ public class Outtake extends SubsystemBase {
     }
 
     public Command continuousLaunch(){
-        double motorOneSpeed = OuttakeConstants.velocityDefault;
+        double motorOneSpeed = OuttakeConstants.velocityDefault * 1.25;
         double motorTwoSpeed = OuttakeConstants.velocityDefault;
 
         return Commands.sequence(
@@ -126,7 +127,7 @@ public class Outtake extends SubsystemBase {
                 run(() -> {
                     double velocity = getVelocityTarget(checkDistance(FieldConstants.Elements.hubPose));
 
-                    highMotor.setSpeed(velocity);
+                    highMotor.setSpeed(velocity * 1.25);
                     lowMotor.setSpeed(velocity);
                 }),
                 Commands.waitUntil(() -> hopperEmpty),
