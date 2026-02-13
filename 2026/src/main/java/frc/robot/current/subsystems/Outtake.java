@@ -27,7 +27,7 @@ public class Outtake extends SubsystemBase {
     private final int motorOneId = Constants.OuttakeConstants.motorOneId;
     private final int motorTwoId = Constants.OuttakeConstants.motorTwoId;
 
-    public Outtake(String robotType, Drive drive) {
+    public Outtake(Drive drive) {
         this.swerve = drive;
         SparkMaxConfig config = new SparkMaxConfig();
         config.inverted(true);
@@ -41,7 +41,7 @@ public class Outtake extends SubsystemBase {
                 .kV(OuttakeConstants.kV) // Velocity gain (volts per RPM)
                 .kA(OuttakeConstants.kA); // Acceleration gain (volts per RPM/s)
 
-        switch (robotType) {
+        switch (Constants.robot) {
             case "Real":
                 motorOne = new VelocityController(new VelocityIOSparkMax(motorOneId, config), "Outtake", "1");
                 motorTwo = new VelocityController(new VelocityIOSparkMax(motorTwoId, config), "Outtake", "2");
@@ -81,8 +81,8 @@ public class Outtake extends SubsystemBase {
     }
 
     public Command quickLaunch() {
-        double motorOneSpeed = 2000;
-        double motorTwoSpeed = 2000;
+        double motorOneSpeed = OuttakeConstants.velocityDefault;
+        double motorTwoSpeed = OuttakeConstants.velocityDefault;
 
         return Commands.sequence(
                 runOnce(() -> {
@@ -92,6 +92,17 @@ public class Outtake extends SubsystemBase {
                 Commands.waitSeconds(1),
                 runOnce(() -> {
                     stop();
+                }));
+    }
+
+    public Command continuousLaunch(){
+        double motorOneSpeed = OuttakeConstants.velocityDefault;
+        double motorTwoSpeed = OuttakeConstants.velocityDefault;
+
+        return Commands.sequence(
+                runOnce(() -> {
+                    motorOne.setSpeed(motorOneSpeed);
+                    motorTwo.setSpeed(motorTwoSpeed);
                 }));
     }
 
