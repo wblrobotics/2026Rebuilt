@@ -61,12 +61,17 @@ public final class Constants {
     public static final double intakeSpeed = 0.5;
 
     // PID
+    // TODO: Tune these values
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
+
+    // TODO: Get these values
+    public static final double upAngle = 90;
+    public static final double downAngle = 0;
   }
   public static class OuttakeConstants {
     public static final int motorOneId = 20;
