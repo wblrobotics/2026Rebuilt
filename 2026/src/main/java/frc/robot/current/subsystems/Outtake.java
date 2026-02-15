@@ -3,6 +3,7 @@ package frc.robot.current.subsystems;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +16,8 @@ import frc.robot.lib.motors.velocityController.VelocityIOSparkFlex;
 import frc.robot.lib.motors.velocityController.VelocityIOSparkMax;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class Outtake extends SubsystemBase {
     private VelocityController highMotor;
@@ -25,8 +28,8 @@ public class Outtake extends SubsystemBase {
 
     private InterpolatingDoubleTreeMap launchMap = new InterpolatingDoubleTreeMap();
 
-    private final int highMotorId = OuttakeConstants.motorOneId;
-    private final int lowMotorId = OuttakeConstants.motorTwoId;
+    private final int highMotorId = OuttakeConstants.highMotorId;
+    private final int lowMotorId = OuttakeConstants.lowMotorId;
 
     public Outtake(Drive drive) {
         this.swerve = drive;
@@ -122,25 +125,23 @@ public class Outtake extends SubsystemBase {
 
     // Runs the launcher at variable RPM in relation to distance from the hub.
     // Motors stop when the hopper is empty
-    public Command fullLaunch() {
+    public Command variableLaunch() {
         return Commands.sequence(
                 run(() -> {
-                    double velocity = getVelocityTarget(checkDistance(FieldConstants.Elements.hubPose));
+                    double velocity = getVelocityTarget(
+                        checkDistance((DriverStation.getAlliance().get() == Alliance.Red) 
+                        ? FieldConstants.Elements.redHubPose : FieldConstants.Elements.blueHubPose));
 
                     highMotor.setSpeed(velocity * 1.25);
                     lowMotor.setSpeed(velocity);
-                }),
-                Commands.waitUntil(() -> hopperEmpty),
-                runOnce(() -> {
-                    stop();
                 }));
     }
 
     /** Stops all the motors */
     public Command stop() {
         return Commands.run(() -> {
-            highMotor.stop();
-            lowMotor.stop();
+            highMotor.setVoltage(0);
+            lowMotor.setVoltage(0);
         },
                 this);
     }
@@ -151,8 +152,9 @@ public class Outtake extends SubsystemBase {
 
     /** Checks the distance from the bot to the target */
     public double checkDistance(Pose2d target) {
-        return Math.sqrt(
-                Math.pow(swerve.targetOffset(target).getX(), 2) + Math.pow(swerve.targetOffset(target).getY(), 2));
+        double value = swerve.getPose().getTranslation().getDistance(target.getTranslation());
+        // double value = Math.sqrt(
+                // Math.pow(swerve.targetOffset(target).getX(), 2) + Math.pow(swerve.targetOffset(target).getY(), 2));
+        return value;
     }
-
 }

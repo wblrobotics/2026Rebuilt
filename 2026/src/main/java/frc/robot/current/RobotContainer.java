@@ -134,7 +134,7 @@ public class RobotContainer {
                 drive,
                 () -> -driveXbox.getLeftY(),
                 () -> -driveXbox.getLeftX(),
-                () -> Rotation2d.kZero));
+                () -> Rotation2d.kCW_90deg));
 
     // Switch to X pattern when X button is pressed
     driveXbox.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -150,6 +150,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
     
     driveXbox.rightBumper().onTrue(outtake.continuousLaunch()).onFalse(outtake.stop());
+
+    driveXbox.leftBumper().onTrue(outtake.variableLaunch()).onFalse(outtake.stop());
 
     // exPivot.setDefaultCommand(
     // Commands.run(() -> {

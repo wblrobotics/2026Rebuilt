@@ -60,10 +60,10 @@ public final class Constants {
 
   }
   public static class OuttakeConstants {
-    public static final int motorOneId = 20;
-    public static final int motorTwoId = 31;
-    public static final int motorThreeId = 22;
+    public static final int highMotorId = 20;
+    public static final int lowMotorId = 31;
 
+    // The velocity for quick launch and continous launch
     public static final double velocityDefault = 2000;
 
     public static final double kP = 0.00006;

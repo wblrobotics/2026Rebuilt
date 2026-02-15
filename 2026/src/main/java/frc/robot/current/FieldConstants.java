@@ -9,10 +9,13 @@ package frc.robot.current;
 
 import static edu.wpi.first.apriltag.AprilTagFields.k2026RebuiltWelded;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.util.Units;
 import java.io.IOException;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 
 /**
  * Contains various field dimensions and useful reference points. Dimensions are
@@ -33,59 +36,40 @@ public class FieldConstants {
   public static double fieldLength = Units.inchesToMeters(651.22);
   public static double fieldWidth = Units.inchesToMeters(317.7);
 
-  public static Translation2d ampCenter = new Translation2d(Units.inchesToMeters(72.455),
-      Units.inchesToMeters(322.996));
-
-  /** Staging locations for each note */
-  public static final class StagingLocations {
-    public static double centerlineX = fieldLength / 2.0;
-
-    // need to update
-    public static double centerlineFirstY = Units.inchesToMeters(29.638);
-    public static double centerlineSeparationY = Units.inchesToMeters(66);
-    public static double spikeX = Units.inchesToMeters(114);
-    // need to update
-    public static double spikeFirstY = Units.inchesToMeters(161.638);
-    public static double spikeSeparationY = Units.inchesToMeters(57);
-
-    public static Translation2d[] centerlineTranslations = new Translation2d[5];
-    public static Translation2d[] spikeTranslations = new Translation2d[3];
-
-    static {
-      for (int i = 0; i < centerlineTranslations.length; i++) {
-        centerlineTranslations[i] = new Translation2d(centerlineX, centerlineFirstY + (i * centerlineSeparationY));
-      }
-    }
-
-    static {
-      for (int i = 0; i < spikeTranslations.length; i++) {
-        spikeTranslations[i] = new Translation2d(spikeX, spikeFirstY + (i * spikeSeparationY));
-      }
-    }
-  }
-
   /** The centers of the blue alliance elements */
   public static final class Elements {
-
-    public static Translation2d outpost = new Translation2d(
+    // Blue alliance elements
+    public static Translation2d blueOutpost = new Translation2d(
         0.35,
-        0.68);
+        0.68); // 26.22 = 0.67 meters
 
-    public static Translation2d depot = new Translation2d(
+    public static Translation2d blueDepot = new Translation2d(
       1,
       5.9);
 
-    public static Translation2d hub = new Translation2d(
-      3.6,
+    public static Translation2d blueHub = new Translation2d(
+      4.62,
       4
     );
 
-    public static Pose2d hubPose = new Pose2d(hub, new Rotation2d(0.0));
+    public static Pose2d blueHubPose = new Pose2d(blueHub, new Rotation2d(0.0));
+ 
+    // Red alliance elements
+    public static Translation2d redOutpost = new Translation2d(
+      16.19,
+      7.4);
 
+    public static Translation2d redDepot = new Translation2d(
+      15.54,
+      2.1);
+
+    public static Translation2d redHub = new Translation2d(
+      11.91,
+      4
+    );
+
+    public static Pose2d redHubPose = new Pose2d(redHub, new Rotation2d(0.0));
   }
-
-
-
 
   public static double aprilTagWidth = Units.inchesToMeters(6.50);
   public static AprilTagFieldLayout aprilTags;
