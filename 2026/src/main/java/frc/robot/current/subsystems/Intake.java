@@ -27,9 +27,6 @@ public class Intake extends SubsystemBase {
   private final int pivotMotorID = Constants.IntakeConstants.pivotMotorID;
   
   public Intake(String robotType, Drive drive) {
-    // TODO: change table and entry keys
-    // table = NetworkTableInstance.getDefault().getTable("default");
-    // visionTarget = table.getEntry("default");
 
     SparkMaxConfig rightConfig = new SparkMaxConfig();
     rightConfig.inverted(true);
@@ -90,17 +87,15 @@ public class Intake extends SubsystemBase {
         }));
   }
 
-  // TODO: Get proper angle for motor up position
   public Command rotateUp() {
     return Commands.runOnce(() -> {
-        pivotMotor.setMotorPosition(90);
+        pivotMotor.setMotorPosition(Constants.IntakeConstants.upAngle);
     });
   }
 
-  // TODO: Get proper angle for motor down position
   public Command rotateDown() {
     return Commands.runOnce(() -> {
-        pivotMotor.setMotorPosition(0);
+        pivotMotor.setMotorPosition(Constants.IntakeConstants.downAngle);
     });
   }
 
