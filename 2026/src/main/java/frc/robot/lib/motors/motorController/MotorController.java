@@ -36,4 +36,8 @@ public class MotorController extends SubsystemBase{
     public double getCurrent() {
         return io.getCurrent();
     }
+
+    public double getEncoder() {
+        return io.getEncoder();
+    }
 }
