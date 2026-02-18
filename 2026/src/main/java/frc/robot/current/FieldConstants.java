@@ -80,6 +80,14 @@ public class FieldConstants {
       4
     );
 
+    public static Translation2d leftTrench = new Translation2d(
+      3.6,
+      7.3);
+      
+    public static Translation2d rightTrench = new Translation2d(
+      3.6,
+      0.7);
+
     public static Pose2d hubPose = new Pose2d(hub, new Rotation2d(0.0));
 
   }
