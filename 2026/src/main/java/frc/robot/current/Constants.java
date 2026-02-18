@@ -51,7 +51,7 @@ public final class Constants {
   }
 
   public static class SwerveConstants {
-
+    public static final double speedLimit = 0.5;
   }
 
   public static class IntakeConstants {
