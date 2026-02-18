@@ -3,10 +3,6 @@ package frc.robot.current.subsystems;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,24 +11,24 @@ import frc.robot.current.Constants.IntakeConstants;
 import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.motors.motorController.MotorController;
 import frc.robot.lib.motors.motorController.MotorIOSparkFlex;
-import frc.robot.lib.motors.motorController.MotorIOSparkMax;
 import frc.robot.lib.motors.positionController.PositionController;
-import frc.robot.lib.motors.positionController.PositionIOSparkFlex;
+import frc.robot.lib.motors.positionController.PositionIOSparkMax;
 
 public class Intake extends SubsystemBase {
   private MotorController intakeMotor;
   private PositionController pivotMotor;
 
-  private final int rightMotorID = Constants.IntakeConstants.motorID;
+  private final int intakeMotorID = Constants.IntakeConstants.motorID;
   private final int pivotMotorID = Constants.IntakeConstants.pivotMotorID;
+  private final String robotType = Constants.robot;
   
-  public Intake(String robotType, Drive drive) {
+  public Intake(Drive drive) {
 
-    SparkMaxConfig rightConfig = new SparkMaxConfig();
-    rightConfig.inverted(true);
-    rightConfig.smartCurrentLimit(30);
+    SparkFlexConfig intakeConfig = new SparkFlexConfig();
+    intakeConfig.inverted(true);
+    intakeConfig.smartCurrentLimit(30);
 
-    SparkFlexConfig pivotConfig = new SparkFlexConfig();
+    SparkMaxConfig pivotConfig = new SparkMaxConfig();
     pivotConfig.inverted(false);
     pivotConfig.smartCurrentLimit(30);
 
@@ -47,16 +43,16 @@ public class Intake extends SubsystemBase {
 
     switch (robotType) {
       case "Real":
-        intakeMotor = new MotorController(new MotorIOSparkFlex(rightMotorID, rightConfig, 35), "Intake", "1");
-        pivotMotor = new PositionController(new PositionIOSparkFlex(pivotMotorID, pivotConfig, 0.0),"Intake");
+        intakeMotor = new MotorController(new MotorIOSparkFlex(intakeMotorID, intakeConfig, 35), "Intake", "1");
+        pivotMotor = new PositionController(new PositionIOSparkMax(pivotMotorID, pivotConfig, 0.0),"Intake");
         break;
       case "SIM":
         // Just don't use sim.
 
         break;
       default:
-        intakeMotor = new MotorController(new MotorIOSparkMax(rightMotorID, rightConfig, 30), "Intake", "1");
-        pivotMotor = new PositionController(new PositionIOSparkFlex(pivotMotorID, pivotConfig,0.0), "Intake");
+        intakeMotor = new MotorController(new MotorIOSparkFlex(intakeMotorID, intakeConfig, 30), "Intake", "1");
+        pivotMotor = new PositionController(new PositionIOSparkMax(pivotMotorID, pivotConfig,0.0), "Intake");
         break;
     }
   }
@@ -75,7 +71,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command spit() {
-    double percent = .2;
+    double percent = 0.2;
 
     return Commands.sequence(
         runOnce(() -> {
@@ -90,26 +86,24 @@ public class Intake extends SubsystemBase {
   public Command rotateUp() {
     return Commands.runOnce(() -> {
         pivotMotor.setMotorPosition(Constants.IntakeConstants.upAngle);
-    });
+    }, this);
   }
 
   public Command rotateDown() {
     return Commands.runOnce(() -> {
         pivotMotor.setMotorPosition(Constants.IntakeConstants.downAngle);
-    });
+    }, this);
   }
 
   public Command intake() {
-    return Commands.run(() -> {
+    return Commands.runOnce(() -> {
       intakeMotor.setPercent(Constants.IntakeConstants.intakeSpeed);
-    },
-        this);
+    }, this);
   }
 
   public Command stop() {
     return Commands.run(() -> {
       intakeMotor.setVoltage(0);
-    },
-        this);
+    }, this);
   }
 }

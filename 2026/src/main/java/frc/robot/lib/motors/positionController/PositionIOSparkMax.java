@@ -10,7 +10,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.current.Constants.OuttakeConstants;
 
 public class PositionIOSparkMax implements PositionControllerIO{
     private final SparkMax motor;

@@ -153,24 +153,16 @@ public class RobotContainer {
 
     driveXbox.leftBumper().onTrue(outtake.variableLaunch()).onFalse(outtake.stop());
 
+    
+    driveXbox.rightTrigger().onTrue(intake.intake()).onFalse(intake.stop());
+
     // exPivot.setDefaultCommand(
     // Commands.run(() -> {
     // exPivot.adjustHeight(-1 * controlXbox.getLeftY());
     // },
     // exPivot));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
-    // controlXbox.a().whileTrue(intake.intake()).onFalse(intake.stop());
-    // controlXbox.x().onTrue(outtake.launch());
-
-    // swerveDrive.setDefaultCommand(
-    // new DriveWithController(swerveDrive, 0.5, 0.5, () -> driveXbox.getLeftX(), ()
-    // -> driveXbox.getLeftY(),
-    // () -> driveXbox.getRightX(), () -> driveXbox.getRightY(), () ->
-    // driveXbox.a().getAsBoolean()));
-    // driveXbox.x().onTrue(Commands.runOnce(swerveDrive::stopWithX, swerveDrive));
+    
   }
 
   /**
