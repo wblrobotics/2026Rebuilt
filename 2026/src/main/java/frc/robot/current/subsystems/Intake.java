@@ -70,12 +70,12 @@ public class Intake extends SubsystemBase {
     intakeMotor.setVoltage(volts);
   }
 
-  public void setPosition(double setpoint){
+  public void setPivotPosition(double setpoint){
     pivotMotor.setMotorPosition(setpoint);
   }
 
-  public Command launch() {
-    double percent = 20;
+  public Command spit() {
+    double percent = .2;
 
     return Commands.sequence(
         runOnce(() -> {
