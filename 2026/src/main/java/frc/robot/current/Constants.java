@@ -59,6 +59,11 @@ public final class Constants {
     public static final double intakeSpeed = 0.5;
 
   }
+
+  public static class HopperConstants {
+    public static final int motorID = 67;
+    public static final double motorSpeed = 0.3; // Motor Speed as a percentage
+  }
   public static class OuttakeConstants {
     public static final int highMotorId = 20;
     public static final int lowMotorId = 31;
