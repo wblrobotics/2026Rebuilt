@@ -29,11 +29,11 @@ public class AutoAlign extends DriveToPose {
 
         // Update these locations in FIELD CONSTANTS as needed. Don't mess with angles.
         public static final Pose2d hubCenter = new Pose2d(
-                        FieldConstants.Elements.hub, Rotation2d.fromDegrees(0));
+                        FieldConstants.Elements.blueHub, Rotation2d.fromDegrees(0));
         public static final Pose2d depotCenter = new Pose2d(
-                        FieldConstants.Elements.depot, Rotation2d.fromDegrees(90));
+                        FieldConstants.Elements.blueDepot, Rotation2d.fromDegrees(90));
         public static final Pose2d outpost = new Pose2d(
-                        FieldConstants.Elements.outpost, Rotation2d.fromDegrees(180));
+                        FieldConstants.Elements.blueOutpost, Rotation2d.fromDegrees(180));
         
         
 
