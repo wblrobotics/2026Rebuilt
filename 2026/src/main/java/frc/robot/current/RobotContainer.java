@@ -64,7 +64,6 @@ public class RobotContainer {
     // leds = new LedOperation();
     // exPivot = new ExamplePivot(Constants.robot);
     // intake = new Intake(Constants.robot);
-    // outtake = new Outtake(Constants.robot);
 
     drive = new Drive(
         new GyroIONavX(),
@@ -79,6 +78,8 @@ public class RobotContainer {
         new VisionIOPhotonVision(camera2Name, robotToCamera2),
         new VisionIOPhotonVision(camera3Name, robotToCamera3)
         ); 
+
+    outtake = new Outtake(drive);
     
 
     autoChooser = new LoggedDashboardChooser<>("Auto Chooser", AutoBuilder.buildAutoChooser());
@@ -133,7 +134,7 @@ public class RobotContainer {
                 drive,
                 () -> -driveXbox.getLeftY(),
                 () -> -driveXbox.getLeftX(),
-                () -> Rotation2d.kZero));
+                () -> Rotation2d.kCCW_90deg));
 
     // Switch to X pattern when X button is pressed
     driveXbox.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -147,6 +148,10 @@ public class RobotContainer {
                     new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                 drive)
                 .ignoringDisable(true));
+    
+    driveXbox.rightBumper().onTrue(outtake.continuousLaunch()).onFalse(outtake.stop());
+
+    driveXbox.leftBumper().onTrue(outtake.variableLaunch()).onFalse(outtake.stop());
 
     // exPivot.setDefaultCommand(
     // Commands.run(() -> {
