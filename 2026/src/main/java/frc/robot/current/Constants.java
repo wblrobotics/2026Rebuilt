@@ -70,8 +70,8 @@ public final class Constants {
     public static final double kA = 0;
 
     // TODO: Get these values
-    public static final double upAngle = 90;
-    public static final double downAngle = 0;
+    public static final double storedAngle = 90;
+    public static final double collectionAngle = 0;
   }
   public static class OuttakeConstants {
     public static final int highMotorId = 20;

@@ -40,4 +40,8 @@ public class PositionController extends SubsystemBase{
     public void setMotorPosition(double rotations) {
         io.setMotorPosition(rotations);
     }
+
+    public double getMotorSetpoint() {
+        return io.getMotorSetpoint();
+    }
 }

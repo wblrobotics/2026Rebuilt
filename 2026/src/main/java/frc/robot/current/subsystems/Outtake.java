@@ -153,8 +153,10 @@ public class Outtake extends SubsystemBase {
     /** Checks the distance from the bot to the target */
     public double checkDistance(Pose2d target) {
         double value = swerve.getPose().getTranslation().getDistance(target.getTranslation());
-        // double value = Math.sqrt(
+        // double value2 = Math.sqrt(
                 // Math.pow(swerve.targetOffset(target).getX(), 2) + Math.pow(swerve.targetOffset(target).getY(), 2));
+        double value2 = Math.hypot(swerve.targetOffset(target).getX(), swerve.targetOffset(target).getY());
+        System.out.print(value - value2);  //TODO: Remove this test to compare distance functions
         return value;
     }
 }

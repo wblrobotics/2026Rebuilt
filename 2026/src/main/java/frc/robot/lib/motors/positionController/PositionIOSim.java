@@ -51,4 +51,9 @@ public class PositionIOSim implements PositionControllerIO{
         motorAppliedVolts = MathUtil.clamp(volts, -12, 12);
         motorSim.setBusVoltage(motorAppliedVolts);
     }
+
+    public double getMotorSetpoint() {
+        // TODO: Implement
+        return 0;
+    }
 }

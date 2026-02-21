@@ -2,6 +2,7 @@ package frc.robot.current.subsystems;
 
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -62,6 +63,10 @@ public class Intake extends SubsystemBase {
     pivotMotor.updateInputs();
   }
 
+  public void initialization(){
+    setPivotPosition(pivotMotor.getAngle());
+  }
+
   public void setVoltage(double volts) {
     intakeMotor.setVoltage(volts);
   }
@@ -70,7 +75,7 @@ public class Intake extends SubsystemBase {
     pivotMotor.setMotorPosition(setpoint);
   }
 
-  public Command spit() {
+  public Command spit() { 
     double percent = 0.2;
 
     return Commands.sequence(
@@ -83,15 +88,27 @@ public class Intake extends SubsystemBase {
         }));
   }
 
-  public Command rotateUp() {
+  public Command gotoStoredPos() {
     return Commands.runOnce(() -> {
-        pivotMotor.setMotorPosition(Constants.IntakeConstants.upAngle);
+        pivotMotor.setMotorPosition(Constants.IntakeConstants.storedAngle);
+    }, this);
+  }
+
+  public Command gotoCollectionPos() {
+    return Commands.runOnce(() -> {
+        pivotMotor.setMotorPosition(Constants.IntakeConstants.collectionAngle);
+    }, this);
+  }
+
+  public Command rotateUp() {
+    return Commands.run(() -> {
+      pivotMotor.setMotorPosition(pivotMotor.getMotorSetpoint() + 1);
     }, this);
   }
 
   public Command rotateDown() {
-    return Commands.runOnce(() -> {
-        pivotMotor.setMotorPosition(Constants.IntakeConstants.downAngle);
+    return Commands.run(() -> {
+      pivotMotor.setMotorPosition(pivotMotor.getMotorSetpoint() - 1);
     }, this);
   }
 

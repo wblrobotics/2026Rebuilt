@@ -57,4 +57,8 @@ public class PositionIOSparkFlex implements PositionControllerIO{
     public void setMotorPosition(double rotations) {
         pidController.setSetpoint(rotations, SparkBase.ControlType.kPosition);
     }
+
+    public double getMotorSetpoint() {
+        return pidController.getSetpoint();
+    }
 }

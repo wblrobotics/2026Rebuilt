@@ -59,4 +59,8 @@ public class PositionIOSparkMax implements PositionControllerIO{
     public void setMotorPosition(double setpoint) {
         pidController.setSetpoint(setpoint, SparkBase.ControlType.kPosition);
     }
+
+    public double getMotorSetpoint() {
+        return pidController.getSetpoint();
+    }
 }

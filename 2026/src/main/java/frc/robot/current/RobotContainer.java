@@ -63,7 +63,6 @@ public class RobotContainer {
 
     // leds = new LedOperation();
     // exPivot = new ExamplePivot(Constants.robot);
-    // intake = new Intake(Constants.robot);
 
     drive = new Drive(
         new GyroIONavX(),
@@ -81,6 +80,7 @@ public class RobotContainer {
 
     outtake = new Outtake(drive);
     
+    intake = new Intake(drive);
 
     autoChooser = new LoggedDashboardChooser<>("Auto Chooser", AutoBuilder.buildAutoChooser());
 
@@ -153,7 +153,9 @@ public class RobotContainer {
 
     driveXbox.leftBumper().onTrue(outtake.variableLaunch()).onFalse(outtake.stop());
 
-    
+    driveXbox.povUp().whileTrue(intake.rotateUp());
+    driveXbox.povDown().whileTrue(intake.rotateDown());
+
     driveXbox.rightTrigger().onTrue(intake.intake()).onFalse(intake.stop());
 
     // exPivot.setDefaultCommand(
