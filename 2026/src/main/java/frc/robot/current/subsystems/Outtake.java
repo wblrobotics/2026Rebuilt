@@ -14,6 +14,7 @@ import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.lib.motors.velocityController.VelocityController;
 import frc.robot.lib.motors.velocityController.VelocityIOSparkFlex;
 import frc.robot.lib.motors.velocityController.VelocityIOSparkMax;
+import edu.wpi.first.math.util.Units;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -125,13 +126,13 @@ public class Outtake extends SubsystemBase {
 
     // Runs the launcher at variable RPM in relation to distance from the hub.
     // Motors stop when the hopper is empty
+    // Distance is in Inches, as needed for the launchMap
     public Command variableLaunch() {
         return Commands.sequence(
                 run(() -> {
-                    double velocity = getVelocityTarget(
-                        checkDistance((DriverStation.getAlliance().get() == Alliance.Red) 
-                        ? FieldConstants.Elements.redHubPose : FieldConstants.Elements.blueHubPose));
-
+                    double distance = checkDistance((DriverStation.getAlliance().get() == Alliance.Red) 
+                        ? FieldConstants.Elements.redHubPose : FieldConstants.Elements.blueHubPose);
+                    double velocity = getVelocityTarget(distance);
                     highMotor.setSpeed(velocity * 1.25);
                     lowMotor.setSpeed(velocity);
                 }));
@@ -150,9 +151,10 @@ public class Outtake extends SubsystemBase {
         return launchMap.get(distance);
     }
 
-    /** Checks the distance from the bot to the target */
+    /** Checks the distance from the bot to the target, Returns in Inches */
     public double checkDistance(Pose2d target) {
-        double value = swerve.getPose().getTranslation().getDistance(target.getTranslation());
+        double distance = swerve.getPose().getTranslation().getDistance(target.getTranslation());
+        double value = Units.metersToInches(distance);
         // double value = Math.sqrt(
                 // Math.pow(swerve.targetOffset(target).getX(), 2) + Math.pow(swerve.targetOffset(target).getY(), 2));
         return value;
