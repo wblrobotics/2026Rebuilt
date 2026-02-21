@@ -25,7 +25,7 @@ import frc.robot.current.subsystems.swerveDrive.Drive;
 import frc.robot.current.subsystems.swerveDrive.DriveConstants;
 import frc.robot.lib.util.GeomUtil;
 
-public class AutoDriver extends Command {
+public class TrajectoryDriver extends Command {
     private final Drive drive;
     private final boolean slowMode;
     private final Supplier<Pose2d> poseSupplier;
@@ -59,11 +59,11 @@ public class AutoDriver extends Command {
     private TrajectoryConfig config = new TrajectoryConfig(DriveConstants.maxSpeedMetersPerSec, driveMaxAcceleration);
         
 
-    public AutoDriver(Drive drive, boolean slowMode, Pose2d finalPose, ArrayList<Translation2d> interiorWaypoints) {
+    public TrajectoryDriver(Drive drive, boolean slowMode, Pose2d finalPose, ArrayList<Translation2d> interiorWaypoints) {
         this(drive, slowMode, () -> finalPose, () -> interiorWaypoints);
     }
 
-    public AutoDriver(Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier, Supplier<ArrayList<Translation2d>> interiorSupplier) {
+    public TrajectoryDriver(Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier, Supplier<ArrayList<Translation2d>> interiorSupplier) {
         this.drive = drive;
         this.slowMode = slowMode;
         this.poseSupplier = poseSupplier;

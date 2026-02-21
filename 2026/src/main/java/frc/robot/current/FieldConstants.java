@@ -52,14 +52,6 @@ public class FieldConstants {
       4
     );
 
-    public static Translation2d leftTrench = new Translation2d(
-      3.6,
-      7.3);
-      
-    public static Translation2d rightTrench = new Translation2d(
-      3.6,
-      0.7);
-
     public static Pose2d blueHubPose = new Pose2d(blueHub, new Rotation2d(0.0));
  
     // Red alliance elements
@@ -77,6 +69,14 @@ public class FieldConstants {
     );
 
     public static Pose2d redHubPose = new Pose2d(redHub, new Rotation2d(0.0));
+
+    public static Translation2d leftTrench = new Translation2d(
+      3.6,
+      7.3);
+      
+    public static Translation2d rightTrench = new Translation2d(
+      3.6,
+      0.7);
   }
 
   public static double aprilTagWidth = Units.inchesToMeters(6.50);
